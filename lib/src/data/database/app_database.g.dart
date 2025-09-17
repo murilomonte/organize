@@ -474,6 +474,7 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     'score',
     aliasedName,
     false,
+    check: () => ComparableExpr(score).isSmallerOrEqualValue(100),
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
@@ -984,6 +985,7 @@ class $SubtasksTable extends Subtasks with TableInfo<$SubtasksTable, Subtask> {
     'score',
     aliasedName,
     false,
+    check: () => ComparableExpr(score).isSmallerOrEqualValue(100),
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
@@ -1440,6 +1442,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $TasksTable tasks = $TasksTable(this);
   late final $SubtasksTable subtasks = $SubtasksTable(this);
   late final GroupsDao groupsDao = GroupsDao(this as AppDatabase);
+  late final TasksDao tasksDao = TasksDao(this as AppDatabase);
+  late final SubtasksDao subtasksDao = SubtasksDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
