@@ -6,9 +6,9 @@ class Subtasks extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get task => integer().references(Tasks, #id)();
   TextColumn get title => text().withLength(min: 1, max: 100)();
-  TextColumn get description => text().withLength(min: 1, max: 500)();
+  TextColumn get description => text().withLength(max: 500).nullable()();
   IntColumn get score => integer()();
-  TextColumn get status => textEnum<Status>()();
+  TextColumn get status => textEnum<Status>().withDefault(Constant(Status.pending.name))();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 }

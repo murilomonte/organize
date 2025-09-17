@@ -41,13 +41,10 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
     'description',
     aliasedName,
-    false,
-    additionalChecks: GeneratedColumn.checkTextLength(
-      minTextLength: 1,
-      maxTextLength: 500,
-    ),
+    true,
+    additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 500),
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _isCompletedMeta = const VerificationMeta(
     'isCompleted',
@@ -58,10 +55,11 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
     aliasedName,
     false,
     type: DriftSqlType.bool,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'CHECK ("is_completed" IN (0, 1))',
     ),
+    defaultValue: Constant(false),
   );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
@@ -127,8 +125,6 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
           _descriptionMeta,
         ),
       );
-    } else if (isInserting) {
-      context.missing(_descriptionMeta);
     }
     if (data.containsKey('is_completed')) {
       context.handle(
@@ -138,8 +134,6 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
           _isCompletedMeta,
         ),
       );
-    } else if (isInserting) {
-      context.missing(_isCompletedMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(
@@ -173,7 +167,7 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
       description: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}description'],
-      )!,
+      ),
       isCompleted: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}is_completed'],
@@ -198,14 +192,14 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
 class Group extends DataClass implements Insertable<Group> {
   final int id;
   final String title;
-  final String description;
+  final String? description;
   final bool isCompleted;
   final DateTime createdAt;
   final DateTime updatedAt;
   const Group({
     required this.id,
     required this.title,
-    required this.description,
+    this.description,
     required this.isCompleted,
     required this.createdAt,
     required this.updatedAt,
@@ -215,7 +209,9 @@ class Group extends DataClass implements Insertable<Group> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['title'] = Variable<String>(title);
-    map['description'] = Variable<String>(description);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
     map['is_completed'] = Variable<bool>(isCompleted);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
@@ -226,7 +222,9 @@ class Group extends DataClass implements Insertable<Group> {
     return GroupsCompanion(
       id: Value(id),
       title: Value(title),
-      description: Value(description),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
       isCompleted: Value(isCompleted),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
@@ -241,7 +239,7 @@ class Group extends DataClass implements Insertable<Group> {
     return Group(
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
-      description: serializer.fromJson<String>(json['description']),
+      description: serializer.fromJson<String?>(json['description']),
       isCompleted: serializer.fromJson<bool>(json['isCompleted']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
@@ -253,7 +251,7 @@ class Group extends DataClass implements Insertable<Group> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'title': serializer.toJson<String>(title),
-      'description': serializer.toJson<String>(description),
+      'description': serializer.toJson<String?>(description),
       'isCompleted': serializer.toJson<bool>(isCompleted),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
@@ -263,14 +261,14 @@ class Group extends DataClass implements Insertable<Group> {
   Group copyWith({
     int? id,
     String? title,
-    String? description,
+    Value<String?> description = const Value.absent(),
     bool? isCompleted,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) => Group(
     id: id ?? this.id,
     title: title ?? this.title,
-    description: description ?? this.description,
+    description: description.present ? description.value : this.description,
     isCompleted: isCompleted ?? this.isCompleted,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
@@ -321,7 +319,7 @@ class Group extends DataClass implements Insertable<Group> {
 class GroupsCompanion extends UpdateCompanion<Group> {
   final Value<int> id;
   final Value<String> title;
-  final Value<String> description;
+  final Value<String?> description;
   final Value<bool> isCompleted;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
@@ -336,13 +334,11 @@ class GroupsCompanion extends UpdateCompanion<Group> {
   GroupsCompanion.insert({
     this.id = const Value.absent(),
     required String title,
-    required String description,
-    required bool isCompleted,
+    this.description = const Value.absent(),
+    this.isCompleted = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  }) : title = Value(title),
-       description = Value(description),
-       isCompleted = Value(isCompleted);
+  }) : title = Value(title);
   static Insertable<Group> custom({
     Expression<int>? id,
     Expression<String>? title,
@@ -364,7 +360,7 @@ class GroupsCompanion extends UpdateCompanion<Group> {
   GroupsCompanion copyWith({
     Value<int>? id,
     Value<String>? title,
-    Value<String>? description,
+    Value<String?>? description,
     Value<bool>? isCompleted,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
@@ -467,13 +463,10 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
     'description',
     aliasedName,
-    false,
-    additionalChecks: GeneratedColumn.checkTextLength(
-      minTextLength: 1,
-      maxTextLength: 500,
-    ),
+    true,
+    additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 500),
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _scoreMeta = const VerificationMeta('score');
   @override
@@ -491,7 +484,8 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
         aliasedName,
         false,
         type: DriftSqlType.string,
-        requiredDuringInsert: true,
+        requiredDuringInsert: false,
+        defaultValue: Constant(Status.pending.name),
       ).withConverter<Status>($TasksTable.$converterstatus);
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
@@ -567,8 +561,6 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
           _descriptionMeta,
         ),
       );
-    } else if (isInserting) {
-      context.missing(_descriptionMeta);
     }
     if (data.containsKey('score')) {
       context.handle(
@@ -614,7 +606,7 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
       description: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}description'],
-      )!,
+      ),
       score: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}score'],
@@ -649,7 +641,7 @@ class Task extends DataClass implements Insertable<Task> {
   final int id;
   final int group;
   final String title;
-  final String description;
+  final String? description;
   final int score;
   final Status status;
   final DateTime createdAt;
@@ -658,7 +650,7 @@ class Task extends DataClass implements Insertable<Task> {
     required this.id,
     required this.group,
     required this.title,
-    required this.description,
+    this.description,
     required this.score,
     required this.status,
     required this.createdAt,
@@ -670,7 +662,9 @@ class Task extends DataClass implements Insertable<Task> {
     map['id'] = Variable<int>(id);
     map['group'] = Variable<int>(group);
     map['title'] = Variable<String>(title);
-    map['description'] = Variable<String>(description);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
     map['score'] = Variable<int>(score);
     {
       map['status'] = Variable<String>(
@@ -687,7 +681,9 @@ class Task extends DataClass implements Insertable<Task> {
       id: Value(id),
       group: Value(group),
       title: Value(title),
-      description: Value(description),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
       score: Value(score),
       status: Value(status),
       createdAt: Value(createdAt),
@@ -704,7 +700,7 @@ class Task extends DataClass implements Insertable<Task> {
       id: serializer.fromJson<int>(json['id']),
       group: serializer.fromJson<int>(json['group']),
       title: serializer.fromJson<String>(json['title']),
-      description: serializer.fromJson<String>(json['description']),
+      description: serializer.fromJson<String?>(json['description']),
       score: serializer.fromJson<int>(json['score']),
       status: $TasksTable.$converterstatus.fromJson(
         serializer.fromJson<String>(json['status']),
@@ -720,7 +716,7 @@ class Task extends DataClass implements Insertable<Task> {
       'id': serializer.toJson<int>(id),
       'group': serializer.toJson<int>(group),
       'title': serializer.toJson<String>(title),
-      'description': serializer.toJson<String>(description),
+      'description': serializer.toJson<String?>(description),
       'score': serializer.toJson<int>(score),
       'status': serializer.toJson<String>(
         $TasksTable.$converterstatus.toJson(status),
@@ -734,7 +730,7 @@ class Task extends DataClass implements Insertable<Task> {
     int? id,
     int? group,
     String? title,
-    String? description,
+    Value<String?> description = const Value.absent(),
     int? score,
     Status? status,
     DateTime? createdAt,
@@ -743,7 +739,7 @@ class Task extends DataClass implements Insertable<Task> {
     id: id ?? this.id,
     group: group ?? this.group,
     title: title ?? this.title,
-    description: description ?? this.description,
+    description: description.present ? description.value : this.description,
     score: score ?? this.score,
     status: status ?? this.status,
     createdAt: createdAt ?? this.createdAt,
@@ -808,7 +804,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
   final Value<int> id;
   final Value<int> group;
   final Value<String> title;
-  final Value<String> description;
+  final Value<String?> description;
   final Value<int> score;
   final Value<Status> status;
   final Value<DateTime> createdAt;
@@ -827,16 +823,14 @@ class TasksCompanion extends UpdateCompanion<Task> {
     this.id = const Value.absent(),
     required int group,
     required String title,
-    required String description,
+    this.description = const Value.absent(),
     required int score,
-    required Status status,
+    this.status = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   }) : group = Value(group),
        title = Value(title),
-       description = Value(description),
-       score = Value(score),
-       status = Value(status);
+       score = Value(score);
   static Insertable<Task> custom({
     Expression<int>? id,
     Expression<int>? group,
@@ -863,7 +857,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Value<int>? id,
     Value<int>? group,
     Value<String>? title,
-    Value<String>? description,
+    Value<String?>? description,
     Value<int>? score,
     Value<Status>? status,
     Value<DateTime>? createdAt,
@@ -979,13 +973,10 @@ class $SubtasksTable extends Subtasks with TableInfo<$SubtasksTable, Subtask> {
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
     'description',
     aliasedName,
-    false,
-    additionalChecks: GeneratedColumn.checkTextLength(
-      minTextLength: 1,
-      maxTextLength: 500,
-    ),
+    true,
+    additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 500),
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _scoreMeta = const VerificationMeta('score');
   @override
@@ -1003,7 +994,8 @@ class $SubtasksTable extends Subtasks with TableInfo<$SubtasksTable, Subtask> {
         aliasedName,
         false,
         type: DriftSqlType.string,
-        requiredDuringInsert: true,
+        requiredDuringInsert: false,
+        defaultValue: Constant(Status.pending.name),
       ).withConverter<Status>($SubtasksTable.$converterstatus);
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
@@ -1079,8 +1071,6 @@ class $SubtasksTable extends Subtasks with TableInfo<$SubtasksTable, Subtask> {
           _descriptionMeta,
         ),
       );
-    } else if (isInserting) {
-      context.missing(_descriptionMeta);
     }
     if (data.containsKey('score')) {
       context.handle(
@@ -1126,7 +1116,7 @@ class $SubtasksTable extends Subtasks with TableInfo<$SubtasksTable, Subtask> {
       description: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}description'],
-      )!,
+      ),
       score: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}score'],
@@ -1161,7 +1151,7 @@ class Subtask extends DataClass implements Insertable<Subtask> {
   final int id;
   final int task;
   final String title;
-  final String description;
+  final String? description;
   final int score;
   final Status status;
   final DateTime createdAt;
@@ -1170,7 +1160,7 @@ class Subtask extends DataClass implements Insertable<Subtask> {
     required this.id,
     required this.task,
     required this.title,
-    required this.description,
+    this.description,
     required this.score,
     required this.status,
     required this.createdAt,
@@ -1182,7 +1172,9 @@ class Subtask extends DataClass implements Insertable<Subtask> {
     map['id'] = Variable<int>(id);
     map['task'] = Variable<int>(task);
     map['title'] = Variable<String>(title);
-    map['description'] = Variable<String>(description);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
     map['score'] = Variable<int>(score);
     {
       map['status'] = Variable<String>(
@@ -1199,7 +1191,9 @@ class Subtask extends DataClass implements Insertable<Subtask> {
       id: Value(id),
       task: Value(task),
       title: Value(title),
-      description: Value(description),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
       score: Value(score),
       status: Value(status),
       createdAt: Value(createdAt),
@@ -1216,7 +1210,7 @@ class Subtask extends DataClass implements Insertable<Subtask> {
       id: serializer.fromJson<int>(json['id']),
       task: serializer.fromJson<int>(json['task']),
       title: serializer.fromJson<String>(json['title']),
-      description: serializer.fromJson<String>(json['description']),
+      description: serializer.fromJson<String?>(json['description']),
       score: serializer.fromJson<int>(json['score']),
       status: $SubtasksTable.$converterstatus.fromJson(
         serializer.fromJson<String>(json['status']),
@@ -1232,7 +1226,7 @@ class Subtask extends DataClass implements Insertable<Subtask> {
       'id': serializer.toJson<int>(id),
       'task': serializer.toJson<int>(task),
       'title': serializer.toJson<String>(title),
-      'description': serializer.toJson<String>(description),
+      'description': serializer.toJson<String?>(description),
       'score': serializer.toJson<int>(score),
       'status': serializer.toJson<String>(
         $SubtasksTable.$converterstatus.toJson(status),
@@ -1246,7 +1240,7 @@ class Subtask extends DataClass implements Insertable<Subtask> {
     int? id,
     int? task,
     String? title,
-    String? description,
+    Value<String?> description = const Value.absent(),
     int? score,
     Status? status,
     DateTime? createdAt,
@@ -1255,7 +1249,7 @@ class Subtask extends DataClass implements Insertable<Subtask> {
     id: id ?? this.id,
     task: task ?? this.task,
     title: title ?? this.title,
-    description: description ?? this.description,
+    description: description.present ? description.value : this.description,
     score: score ?? this.score,
     status: status ?? this.status,
     createdAt: createdAt ?? this.createdAt,
@@ -1320,7 +1314,7 @@ class SubtasksCompanion extends UpdateCompanion<Subtask> {
   final Value<int> id;
   final Value<int> task;
   final Value<String> title;
-  final Value<String> description;
+  final Value<String?> description;
   final Value<int> score;
   final Value<Status> status;
   final Value<DateTime> createdAt;
@@ -1339,16 +1333,14 @@ class SubtasksCompanion extends UpdateCompanion<Subtask> {
     this.id = const Value.absent(),
     required int task,
     required String title,
-    required String description,
+    this.description = const Value.absent(),
     required int score,
-    required Status status,
+    this.status = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   }) : task = Value(task),
        title = Value(title),
-       description = Value(description),
-       score = Value(score),
-       status = Value(status);
+       score = Value(score);
   static Insertable<Subtask> custom({
     Expression<int>? id,
     Expression<int>? task,
@@ -1375,7 +1367,7 @@ class SubtasksCompanion extends UpdateCompanion<Subtask> {
     Value<int>? id,
     Value<int>? task,
     Value<String>? title,
-    Value<String>? description,
+    Value<String?>? description,
     Value<int>? score,
     Value<Status>? status,
     Value<DateTime>? createdAt,
@@ -1453,14 +1445,17 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [groups, tasks, subtasks];
+  @override
+  DriftDatabaseOptions get options =>
+      const DriftDatabaseOptions(storeDateTimeAsText: true);
 }
 
 typedef $$GroupsTableCreateCompanionBuilder =
     GroupsCompanion Function({
       Value<int> id,
       required String title,
-      required String description,
-      required bool isCompleted,
+      Value<String?> description,
+      Value<bool> isCompleted,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
     });
@@ -1468,7 +1463,7 @@ typedef $$GroupsTableUpdateCompanionBuilder =
     GroupsCompanion Function({
       Value<int> id,
       Value<String> title,
-      Value<String> description,
+      Value<String?> description,
       Value<bool> isCompleted,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
@@ -1690,7 +1685,7 @@ class $$GroupsTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<String> title = const Value.absent(),
-                Value<String> description = const Value.absent(),
+                Value<String?> description = const Value.absent(),
                 Value<bool> isCompleted = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
@@ -1706,8 +1701,8 @@ class $$GroupsTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 required String title,
-                required String description,
-                required bool isCompleted,
+                Value<String?> description = const Value.absent(),
+                Value<bool> isCompleted = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => GroupsCompanion.insert(
@@ -1770,9 +1765,9 @@ typedef $$TasksTableCreateCompanionBuilder =
       Value<int> id,
       required int group,
       required String title,
-      required String description,
+      Value<String?> description,
       required int score,
-      required Status status,
+      Value<Status> status,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
     });
@@ -1781,7 +1776,7 @@ typedef $$TasksTableUpdateCompanionBuilder =
       Value<int> id,
       Value<int> group,
       Value<String> title,
-      Value<String> description,
+      Value<String?> description,
       Value<int> score,
       Value<Status> status,
       Value<DateTime> createdAt,
@@ -2102,7 +2097,7 @@ class $$TasksTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<int> group = const Value.absent(),
                 Value<String> title = const Value.absent(),
-                Value<String> description = const Value.absent(),
+                Value<String?> description = const Value.absent(),
                 Value<int> score = const Value.absent(),
                 Value<Status> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
@@ -2122,9 +2117,9 @@ class $$TasksTableTableManager
                 Value<int> id = const Value.absent(),
                 required int group,
                 required String title,
-                required String description,
+                Value<String?> description = const Value.absent(),
                 required int score,
-                required Status status,
+                Value<Status> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => TasksCompanion.insert(
@@ -2219,9 +2214,9 @@ typedef $$SubtasksTableCreateCompanionBuilder =
       Value<int> id,
       required int task,
       required String title,
-      required String description,
+      Value<String?> description,
       required int score,
-      required Status status,
+      Value<Status> status,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
     });
@@ -2230,7 +2225,7 @@ typedef $$SubtasksTableUpdateCompanionBuilder =
       Value<int> id,
       Value<int> task,
       Value<String> title,
-      Value<String> description,
+      Value<String?> description,
       Value<int> score,
       Value<Status> status,
       Value<DateTime> createdAt,
@@ -2483,7 +2478,7 @@ class $$SubtasksTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<int> task = const Value.absent(),
                 Value<String> title = const Value.absent(),
-                Value<String> description = const Value.absent(),
+                Value<String?> description = const Value.absent(),
                 Value<int> score = const Value.absent(),
                 Value<Status> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
@@ -2503,9 +2498,9 @@ class $$SubtasksTableTableManager
                 Value<int> id = const Value.absent(),
                 required int task,
                 required String title,
-                required String description,
+                Value<String?> description = const Value.absent(),
                 required int score,
-                required Status status,
+                Value<Status> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => SubtasksCompanion.insert(
