@@ -440,7 +440,7 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES "groups" (id)',
+      'REFERENCES "groups" (id) ON DELETE CASCADE',
     ),
   );
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
@@ -474,7 +474,6 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     'score',
     aliasedName,
     false,
-    check: () => ComparableExpr(score).isSmallerOrEqualValue(100),
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
@@ -951,7 +950,7 @@ class $SubtasksTable extends Subtasks with TableInfo<$SubtasksTable, Subtask> {
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES tasks (id)',
+      'REFERENCES tasks (id) ON DELETE CASCADE',
     ),
   );
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
@@ -985,7 +984,6 @@ class $SubtasksTable extends Subtasks with TableInfo<$SubtasksTable, Subtask> {
     'score',
     aliasedName,
     false,
-    check: () => ComparableExpr(score).isSmallerOrEqualValue(100),
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
@@ -1449,6 +1447,23 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [groups, tasks, subtasks];
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'groups',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('tasks', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'tasks',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('subtasks', kind: UpdateKind.delete)],
+    ),
+  ]);
   @override
   DriftDatabaseOptions get options =>
       const DriftDatabaseOptions(storeDateTimeAsText: true);

@@ -26,6 +26,9 @@ class AppDatabase extends _$AppDatabase {
       name: 'organizedb',
       native: DriftNativeOptions(
         databaseDirectory: getApplicationSupportDirectory,
+        setup: (db) {
+          db.execute('PRAGMA foreign_keys = ON;');
+        },
       ),
     );
   }
