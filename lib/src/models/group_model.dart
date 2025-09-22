@@ -1,0 +1,67 @@
+import 'package:organize/src/data/database/app_database.dart';
+import 'package:organize/src/models/task_model.dart';
+
+class GroupModel {
+  final int? id;
+  final String title;
+  final String? description;
+  final bool isCompleted;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final List<TaskModel> tasks;
+
+  GroupModel({
+    this.id,
+    required this.title,
+    this.description,
+    required this.isCompleted,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.tasks,
+  });
+
+  @override
+  String toString() {
+    return '''
+{
+  "id": $id,
+  "title": "$title",
+  "description": ${description != null ? '"$description"' : null},
+  "isCompleted": $isCompleted,
+  "createdAt": "$createdAt",
+  "updatedAt": "$updatedAt",
+  "tasks": $tasks
+}''';
+  }
+
+  GroupModel copywith({
+    int? id,
+    String? title,
+    String? description,
+    bool? isCompleted,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return GroupModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      isCompleted: isCompleted ?? this.isCompleted,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? DateTime.now(),
+      tasks: tasks,
+    );
+  }
+
+  static GroupModel fromEntity(Group group) {
+    return GroupModel(
+      id: group.id,
+      title: group.title,
+      description: group.description,
+      isCompleted: group.isCompleted,
+      createdAt: group.createdAt,
+      updatedAt: group.updatedAt,
+      tasks: [],
+    );
+  }
+}
