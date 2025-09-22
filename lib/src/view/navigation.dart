@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:organize/src/utility/constraints.dart';
+import 'package:organize/src/view/tasks/all_tasks.dart';
 
+// TODO: trocar por navegacao por abas assim como os apps gnome?
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
 
@@ -23,7 +25,7 @@ class _NavigationState extends State<Navigation> {
   ];
 
   List<Widget> views = [
-    Center(child: Text('Home')),
+    AllTasks(),
     Center(child: Text('Progress')),
   ];
 
@@ -50,6 +52,9 @@ class _NavigationState extends State<Navigation> {
           }).toList(),
         ),
         body: views[_currentIndex],
+        floatingActionButton: FloatingActionButton.extended(onPressed: () {
+          
+        }, label: Text('Add task'), icon: Icon(Icons.add), ),
       );
     } else {
       return Scaffold(
