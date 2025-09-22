@@ -12,9 +12,9 @@ sealed class Result<T> {
   const Result();
 }
 
-class Sucess<T> extends Result<T> {
+class Success<T> extends Result<T> {
   final T data;
-  Sucess(this.data);
+  Success(this.data);
 }
 
 class Failure<T> extends Result<T> {
@@ -63,7 +63,7 @@ class OrganizeRepository {
         result.add(groupModel);
       }
 
-      return Sucess(result);
+      return Success(result);
     } catch (err) {
       return Failure("Unexpected error: $err");
     }
@@ -72,7 +72,7 @@ class OrganizeRepository {
   Future<Result<int>> createGroup(GroupsCompanion group) async {
     try {
       int id = await groupsDao.createGroup(group);
-      return Sucess(id);
+      return Success(id);
     } catch (err) {
       return Failure("Unexpected error: $err");
     }
@@ -81,7 +81,7 @@ class OrganizeRepository {
   Future<Result<int>> createTask(TasksCompanion task) async {
     try {
       int id = await tasksDao.createTask(task);
-      return Sucess(id);
+      return Success(id);
     } catch (err) {
       return Failure("Unexpected error: $err");
     }
@@ -90,7 +90,7 @@ class OrganizeRepository {
   Future<Result<int>> createSubtask(SubtasksCompanion subtask) async {
     try {
       int id = await subtasksDao.createSubtask(subtask);
-      return Sucess(id);
+      return Success(id);
     } catch (err) {
       return Failure("Unexpected error: $err");
     }
@@ -99,7 +99,7 @@ class OrganizeRepository {
   Future<Result<int>> updateGroup(GroupsCompanion group) async {
     try {
       int id = await groupsDao.updateGroup(group.id.value, group);
-      return Sucess(id);
+      return Success(id);
     } catch (err) {
       return Failure("Unexpected error: $err");
     }
@@ -108,7 +108,7 @@ class OrganizeRepository {
   Future<Result<int>> updateTask(TasksCompanion task) async {
     try {
       int id = await tasksDao.updateTask(task.id.value, task);
-      return Sucess(id);
+      return Success(id);
     } catch (err) {
       return Failure("Unexpected error: $err");
     }
@@ -117,7 +117,7 @@ class OrganizeRepository {
   Future<Result<int>> updateSubtask(SubtasksCompanion subtask) async {
     try {
       int id = await subtasksDao.updateSubtask(subtask.id.value, subtask);
-      return Sucess(id);
+      return Success(id);
     } catch (err) {
       return Failure("Unexpected error: $err");
     }
@@ -126,7 +126,7 @@ class OrganizeRepository {
   Future<Result<int>> deleteGroup(int id) async {
     try {
       int result = await groupsDao.deleteGroup(id);
-      return Sucess(result);
+      return Success(result);
     } catch (err) {
       return Failure("Unexpected error: $err");
     }
@@ -135,7 +135,7 @@ class OrganizeRepository {
   Future<Result<int>> deleteTask(int id) async {
     try {
       int result = await tasksDao.deleteTask(id);
-      return Sucess(result);
+      return Success(result);
     } catch (err) {
       return Failure("Unexpected error: $err");
     }
@@ -144,7 +144,7 @@ class OrganizeRepository {
   Future<Result<int>> deleteSubtask(int id) async {
     try {
       int result = await subtasksDao.deleteSubtask(id);
-      return Sucess(result);
+      return Success(result);
     } catch (err) {
       return Failure("Unexpected error: $err");
     }
@@ -162,7 +162,7 @@ class OrganizeRepository {
         totalScore: totalScore,
       );
 
-      return Sucess(result);
+      return Success(result);
     } catch (err) {
       return Failure("Unexpected error: $err");
     }
