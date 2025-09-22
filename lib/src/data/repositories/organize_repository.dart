@@ -1,8 +1,10 @@
 import 'package:organize/src/data/database/app_database.dart';
 import 'package:organize/src/data/database/daos/groups_dao.dart';
+import 'package:organize/src/data/database/daos/status_dao.dart';
 import 'package:organize/src/data/database/daos/subtasks_dao.dart';
 import 'package:organize/src/data/database/daos/tasks_dao.dart';
 import 'package:organize/src/models/group_model.dart';
+import 'package:organize/src/models/status_model.dart';
 import 'package:organize/src/models/subtask_model.dart';
 import 'package:organize/src/models/task_model.dart';
 
@@ -24,11 +26,13 @@ class OrganizeRepository {
   final GroupsDao groupsDao;
   final TasksDao tasksDao;
   final SubtasksDao subtasksDao;
+  final StatusDao statusDao;
 
   OrganizeRepository({
     required this.groupsDao,
     required this.tasksDao,
     required this.subtasksDao,
+    required this.statusDao,
   });
 
   Future<Result<List<GroupModel>>> getAllGroupWithTasksAndSubtasks() async {
@@ -146,5 +150,21 @@ class OrganizeRepository {
     }
   }
 
-  //TODO - Metodo para consultar a quantidade total de tarefas feitas (tasks e subtasks) e a quantidade de pontos obtidos.
+  Future<Result<StatusModel>> getStatus() async {
+    try {
+      int completedCount = await statusDao.getCompletedCount();
+      int pendingCount = await statusDao.getPendingCount();
+      int totalScore = await statusDao.getTotalScore();
+
+      StatusModel result = StatusModel(
+        completed: completedCount,
+        pending: pendingCount,
+        totalScore: totalScore,
+      );
+
+      return Sucess(result);
+    } catch (err) {
+      return Failure("Unexpected error: $err");
+    }
+  }
 }

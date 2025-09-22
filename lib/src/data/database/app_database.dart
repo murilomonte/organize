@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:organize/src/data/database/daos/groups_dao.dart';
+import 'package:organize/src/data/database/daos/status_dao.dart';
 import 'package:organize/src/data/database/daos/subtasks_dao.dart';
 import 'package:organize/src/data/database/daos/tasks_dao.dart';
 import 'package:organize/src/data/database/status_enum.dart';
@@ -13,7 +14,7 @@ part 'app_database.g.dart';
 
 @DriftDatabase(
   tables: [Groups, Tasks, Subtasks],
-  daos: [GroupsDao, TasksDao, SubtasksDao],
+  daos: [GroupsDao, TasksDao, SubtasksDao, StatusDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
