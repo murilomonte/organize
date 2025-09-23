@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:organize/src/_core/widgets/group_item.dart';
+import 'package:organize/src/utility/constraints.dart';
 import 'package:organize/src/view_models/group_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +10,7 @@ class AllGroups extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('All tasks')),
+      appBar: isMobileLayout(context) ? AppBar(title: Text('All tasks')) : null,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(

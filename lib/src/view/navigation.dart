@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:organize/src/utility/constraints.dart';
 import 'package:organize/src/view/groups/all_groups.dart';
 
-// TODO: trocar por navegacao por abas assim como os apps gnome?
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
 
@@ -24,12 +23,9 @@ class _NavigationState extends State<Navigation> {
     ),
   ];
 
-  List<Widget> views = [
-    AllGroups(),
-    Center(child: Text('Progress')),
-  ];
+  List<Widget> views = [AllGroups(), Center(child: Text('Progress'))];
 
-  void _onDestinationSelected(value) {
+  void _onDestinationSelected(int value) {
     setState(() {
       _currentIndex = value;
     });
@@ -52,32 +48,60 @@ class _NavigationState extends State<Navigation> {
           }).toList(),
         ),
         body: views[_currentIndex],
-        floatingActionButton: FloatingActionButton.extended(onPressed: () {
-          
-        }, label: Text('Add task'), icon: Icon(Icons.add), ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {},
+          label: Text('Add task'),
+          icon: Icon(Icons.add),
+        ),
       );
     } else {
-      return Scaffold(
-        body: Row(
-          children: [
-            SafeArea(
-              child: NavigationRail(
-                minExtendedWidth: 200,
-                backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-                extended: true,
-                destinations: destinations.map((e) {
-                  return NavigationRailDestination(
-                    icon: e.icon,
-                    selectedIcon: e.selectedIcon,
-                    label: Text(e.label),
-                  );
-                }).toList(),
-                selectedIndex: _currentIndex,
-                onDestinationSelected: _onDestinationSelected,
+      return DefaultTabController(
+        initialIndex: 0,
+        length: 2,
+        child: Scaffold(
+          body: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceContainer,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+                      SizedBox(
+                        width: 500,
+                        child: TabBar(
+                          dividerColor: Colors.transparent,
+                          indicatorPadding: EdgeInsetsGeometry.all(5),
+                          indicator: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surfaceBright,
+                          ),
+                          tabs: destinations.map((e) {
+                            return Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Row(
+                                spacing: 10,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [e.icon, Text(e.label)],
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+                    ],
+                  ),
+                ),
               ),
-            ),
-            Expanded(child: views[_currentIndex]),
-          ],
+              Expanded(child: TabBarView(children: views)),
+            ],
+          ),
         ),
       );
     }
