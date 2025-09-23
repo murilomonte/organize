@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:organize/src/_core/widgets/organize_app_bar.dart';
 import 'package:organize/src/utility/constraints.dart';
 
-class TasksGroupDetail extends StatelessWidget {
+class GroupModal extends StatelessWidget {
   final String title;
   final String? description;
   final List taskList;
-  const TasksGroupDetail({
+  const GroupModal({
     super.key,
     required this.title,
     required this.taskList,
@@ -29,8 +29,7 @@ class TasksGroupDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(title, style: TextStyle(fontSize: 30)),
-                      if (description != null)
-                      Text(description!)
+                      if (description != null) Text(description!),
                     ],
                   ),
                 ),
@@ -54,7 +53,10 @@ class TasksGroupDetail extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [Text(title, style: TextStyle(fontSize: 30))],
+                      children: [
+                        Text(title, style: TextStyle(fontSize: 30)),
+                        if (description != null) Text(description!),
+                      ],
                     ),
                   ),
                 ),

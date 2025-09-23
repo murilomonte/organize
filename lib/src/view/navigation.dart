@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:organize/src/utility/constraints.dart';
-import 'package:organize/src/view/tasks/all_tasks.dart';
+import 'package:organize/src/view/groups/all_groups.dart';
 
 // TODO: trocar por navegacao por abas assim como os apps gnome?
 class Navigation extends StatefulWidget {
@@ -15,7 +15,7 @@ class _NavigationState extends State<Navigation> {
     (
       icon: Icon(Icons.task_alt_outlined),
       selectedIcon: Icon(Icons.task_alt),
-      label: 'Tasks',
+      label: 'Groups',
     ),
     (
       icon: Icon(Icons.show_chart_outlined),
@@ -25,7 +25,7 @@ class _NavigationState extends State<Navigation> {
   ];
 
   List<Widget> views = [
-    AllTasks(),
+    AllGroups(),
     Center(child: Text('Progress')),
   ];
 

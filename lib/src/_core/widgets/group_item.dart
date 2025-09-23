@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:organize/src/_core/widgets/tasks_group_detail.dart';
+import 'package:organize/src/_core/widgets/group_modal.dart';
 
-class TasksGroup extends StatelessWidget {
+class GroupItem extends StatelessWidget {
   final String title;
   final String? description;
   final List taskList;
 
-  const TasksGroup({
+  const GroupItem({
     super.key,
     required this.title,
     this.description,
@@ -26,7 +26,11 @@ class TasksGroup extends StatelessWidget {
             barrierDismissible: true, // se pode fechar clicando fora
             barrierLabel: "Fechar", // acessibilidade
             pageBuilder: (context, animation, secondaryAnimation) {
-              return TasksGroupDetail(title: title, description: description, taskList: [],);
+              return GroupModal(
+                title: title,
+                description: description,
+                taskList: taskList,
+              );
             },
           );
         },

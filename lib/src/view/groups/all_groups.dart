@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:organize/src/_core/widgets/tasks_group.dart';
-import 'package:organize/src/utility/constraints.dart';
+import 'package:organize/src/_core/widgets/group_item.dart';
+import 'package:organize/src/view_models/group_view_model.dart';
+import 'package:provider/provider.dart';
 
-class AllTasks extends StatelessWidget {
-  const AllTasks({super.key});
+class AllGroups extends StatelessWidget {
+  const AllGroups({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,38 +15,14 @@ class AllTasks extends StatelessWidget {
         child: Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 800),
-            child:
-                1 == 1 // Provisorio
-                ? ListView(
-                    children: [
-                      // Only in desktop
-                      if (!isMobileLayout(context))
-                        Align(
-                          alignment: AlignmentGeometry.topRight,
-                          child: TextButton.icon(
-                            onPressed: () {},
-                            label: Text('Add task'),
-                            icon: Icon(Icons.add),
-                            iconAlignment: IconAlignment.end,
-                          ),
-                        ),
+            child: Consumer<GroupViewModel>(
+              builder: (context, value, child) {
+                if (value.isLoading) {
+                  return Center(child: CircularProgressIndicator());
+                }
 
-                      TasksGroup(
-                        title: 'Atividades domésticas',
-                        description:
-                            'Atividades que tenho que fazer antes que um monstro me pegue :O',
-                        taskList: [],
-                      ),
-                      TasksGroup(title: 'O projeto la', taskList: []),
-                      TasksGroup(
-                        title: 'Trabalhos da escola',
-                        description:
-                            'Trabalhos que deverão ser concluídos para liberar o mais oculto aspecto do meu conhecimento >:)',
-                        taskList: [],
-                      ),
-                    ],
-                  )
-                : Center(
+                if (value.groupList.isEmpty) {
+                  return Center(
                     child: Column(
                       spacing: 10,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -75,7 +52,20 @@ class AllTasks extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
+                  );
+                }
+                return ListView.builder(
+                  itemCount: value.groupList.length,
+                  itemBuilder: (context, index) {
+                    return GroupItem(
+                      title: value.groupList[index].title,
+                      description: value.groupList[index].description,
+                      taskList: value.groupList[index].tasks,
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ),
       ),
