@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:organize/src/view/navigation.dart';
+import 'package:organize/src/views/navigation.dart';
 
 class Organize extends StatelessWidget {
   final bool isFirstLogin = false;

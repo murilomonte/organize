@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:organize/src/utility/constraints.dart';
-import 'package:organize/src/view/groups/all_groups.dart';
+import 'package:organize/src/views/groups/all_groups.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
