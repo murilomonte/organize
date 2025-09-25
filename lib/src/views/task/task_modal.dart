@@ -72,7 +72,7 @@ class TasksModal extends StatelessWidget {
                   id: subtaskList[index].id,
                   title: subtaskList[index].title,
                   description: subtaskList[index].description,
-                  status: Status.pending,
+                  status: subtaskList[index].status,
                   internalList: [],
                   
                 );

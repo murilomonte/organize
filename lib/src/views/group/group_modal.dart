@@ -73,7 +73,7 @@ class GroupModal extends StatelessWidget {
                   id: taskList[index].id,
                   title: taskList[index].title,
                   description: taskList[index].description,
-                  status: Status.pending,
+                  status: taskList[index].status,
                   internalList: taskList[index].subtasks,
                   onTap: () {
                     showGeneralDialog(
@@ -82,11 +82,12 @@ class GroupModal extends StatelessWidget {
                       barrierDismissible: true,
                       barrierLabel: "Close",
                       pageBuilder: (context, animation, secondaryAnimation) {
+
                         return TasksModal(
                           id: taskList[index].id,
                           title: taskList[index].title,
                           description: taskList[index].description,
-                          status: Status.pending,
+                          status: taskList[index].status,
                           subtaskList: taskList[index].subtasks,
                           createdAt: taskList[index].createdAt,
                           updatedAt: taskList[index].updatedAt,

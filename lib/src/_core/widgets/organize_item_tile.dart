@@ -58,13 +58,24 @@ class OrganizeItemTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      spacing: 10,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (status == Status.completed)
+                          Icon(
+                            Icons.task_alt,
+                            size: 20,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                      ],
                     ),
                     if (description != null)
                       Text(description!, overflow: TextOverflow.ellipsis),
@@ -79,7 +90,9 @@ class OrganizeItemTile extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 20),
-                          Text('${_tasksDoneCount()}/${internalList.length} done'),
+                          Text(
+                            '${_tasksDoneCount()}/${internalList.length} done',
+                          ),
                         ],
                       ),
                   ],
