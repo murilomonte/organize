@@ -10,7 +10,7 @@ class AllGroups extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: isMobileLayout(context) ? AppBar(title: Text('All tasks')) : null,
+      appBar:AppBar(title: Text('All tasks')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
