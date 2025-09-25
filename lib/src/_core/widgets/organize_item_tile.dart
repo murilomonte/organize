@@ -18,7 +18,7 @@ class OrganizeItemTile extends StatelessWidget {
     required this.internalList,
     this.onTap,
   });
-  
+
   int _tasksDoneCount() {
     if (internalList.isNotEmpty) {
       int tasksDone = 0;
@@ -43,7 +43,9 @@ class OrganizeItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print(status);
     return Card(
+      margin: EdgeInsets.symmetric(vertical: 5),
       elevation: 0,
       child: InkWell(
         borderRadius: BorderRadius.circular(10),

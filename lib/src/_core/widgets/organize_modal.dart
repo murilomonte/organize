@@ -4,10 +4,14 @@ import 'package:organize/src/utility/constraints.dart';
 
 class OrganizeModal extends StatelessWidget {
   final List<Widget> children;
+  final double? maxWidth;
+  final double? maxHeight;
 
   const OrganizeModal({
     super.key,
     required this.children,
+    this.maxWidth,
+    this.maxHeight,
   });
 
   @override
@@ -38,7 +42,10 @@ class OrganizeModal extends StatelessWidget {
           return Dialog(
             backgroundColor: Theme.of(context).colorScheme.surface,
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 800),
+              constraints: BoxConstraints(
+                maxWidth: maxWidth ?? 800,
+                maxHeight: maxHeight ?? double.infinity
+              ),
               child: Column(
                 children: [
                   OrganizeAppBar(),

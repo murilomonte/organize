@@ -3,6 +3,7 @@ import 'package:organize/src/_core/widgets/organize_item_tile.dart';
 import 'package:organize/src/_core/widgets/organize_modal.dart';
 import 'package:organize/src/data/database/status_enum.dart';
 import 'package:organize/src/models/subtask_model.dart';
+import 'package:organize/src/views/subtask/subtask_modal.dart';
 
 class TasksModal extends StatelessWidget {
   final int id;
@@ -74,7 +75,23 @@ class TasksModal extends StatelessWidget {
                   description: subtaskList[index].description,
                   status: subtaskList[index].status,
                   internalList: [],
-                  
+                  onTap: () {
+                    showGeneralDialog(
+                      context: context,
+                      fullscreenDialog: false,
+                      barrierDismissible: true,
+                      barrierLabel: "Close",
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return SubtaskModal(
+                          id: subtaskList[index].id,
+                          title: subtaskList[index].title,
+                          status: subtaskList[index].status,
+                          createdAt: subtaskList[index].createdAt,
+                          updatedAt: subtaskList[index].updatedAt,
+                        );
+                      },
+                    );
+                  },
                 );
               },
             ),
