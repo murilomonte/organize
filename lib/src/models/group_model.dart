@@ -2,7 +2,7 @@ import 'package:organize/src/data/database/app_database.dart';
 import 'package:organize/src/models/task_model.dart';
 
 class GroupModel {
-  final int? id;
+  final int id;
   final String title;
   final String? description;
   final bool isCompleted;
@@ -11,7 +11,7 @@ class GroupModel {
   final List<TaskModel> tasks;
 
   GroupModel({
-    this.id,
+    required this.id,
     required this.title,
     this.description,
     required this.isCompleted,

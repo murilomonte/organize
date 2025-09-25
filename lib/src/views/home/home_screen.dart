@@ -59,7 +59,7 @@ class HomeScreen extends StatelessWidget {
                   itemCount: value.groupList.length,
                   itemBuilder: (context, index) {
                     return OrganizeItemTile(
-                      id: value.groupList[index].id!,
+                      id: value.groupList[index].id,
                       title: value.groupList[index].title,
                       description: value.groupList[index].description,
                       status: Status.pending,
@@ -73,7 +73,7 @@ class HomeScreen extends StatelessWidget {
                           pageBuilder:
                               (context, animation, secondaryAnimation) {
                                 return GroupModal(
-                                  id: value.groupList[index].id!,
+                                  id: value.groupList[index].id,
                                   title: value.groupList[index].title,
                                   description: value.groupList[index].description,
                                   status: Status.pending,

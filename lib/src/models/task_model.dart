@@ -3,7 +3,7 @@ import 'package:organize/src/data/database/status_enum.dart';
 import 'package:organize/src/models/subtask_model.dart';
 
 class TaskModel {
-  final int? id;
+  final int id;
   final int groupId;
   final String title;
   final int score;
@@ -14,7 +14,7 @@ class TaskModel {
   final List<SubtaskModel> subtasks;
 
   TaskModel({
-    this.id,
+    required this.id,
     required this.groupId,
     required this.title,
     required this.score,

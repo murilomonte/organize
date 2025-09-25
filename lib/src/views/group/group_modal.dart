@@ -70,7 +70,7 @@ class GroupModal extends StatelessWidget {
               itemCount: taskList.length,
               itemBuilder: (context, index) {
                 return OrganizeItemTile(
-                  id: taskList[index].id!,
+                  id: taskList[index].id,
                   title: taskList[index].title,
                   description: taskList[index].description,
                   status: Status.pending,
@@ -83,7 +83,7 @@ class GroupModal extends StatelessWidget {
                       barrierLabel: "Close",
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return TasksModal(
-                          id: taskList[index].id!,
+                          id: taskList[index].id,
                           title: taskList[index].title,
                           description: taskList[index].description,
                           status: Status.pending,
