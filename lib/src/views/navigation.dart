@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:organize/src/utility/constraints.dart';
-import 'package:organize/src/views/groups/all_groups.dart';
+import 'package:organize/src/views/home/home_screen.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
@@ -23,7 +23,7 @@ class _NavigationState extends State<Navigation> {
     ),
   ];
 
-  List<Widget> views = [AllGroups(), Center(child: Text('Progress'))];
+  List<Widget> views = [HomeScreen(), Center(child: Text('Progress'))];
 
   void _onDestinationSelected(int value) {
     setState(() {

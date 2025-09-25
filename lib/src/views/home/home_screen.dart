@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:organize/src/_core/widgets/group_item.dart';
-import 'package:organize/src/utility/constraints.dart';
+import 'package:organize/src/_core/widgets/organize_item_tile.dart';
+import 'package:organize/src/data/database/status_enum.dart';
 import 'package:organize/src/view_models/group_view_model.dart';
+import 'package:organize/src/views/group/group_modal.dart';
 import 'package:provider/provider.dart';
 
-class AllGroups extends StatelessWidget {
-  const AllGroups({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:AppBar(title: Text('All tasks')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
@@ -58,10 +58,32 @@ class AllGroups extends StatelessWidget {
                 return ListView.builder(
                   itemCount: value.groupList.length,
                   itemBuilder: (context, index) {
-                    return GroupItem(
+                    return OrganizeItemTile(
+                      id: value.groupList[index].id!,
                       title: value.groupList[index].title,
                       description: value.groupList[index].description,
-                      taskList: value.groupList[index].tasks,
+                      status: Status.pending,
+                      internalList: value.groupList[index].tasks,
+                      onTap: () {
+                        showGeneralDialog(
+                          context: context,
+                          fullscreenDialog: false,
+                          barrierDismissible: true,
+                          barrierLabel: "Close",
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) {
+                                return GroupModal(
+                                  id: value.groupList[index].id!,
+                                  title: value.groupList[index].title,
+                                  description: value.groupList[index].description,
+                                  status: Status.pending,
+                                  taskList: value.groupList[index].tasks,
+                                  createdAt: value.groupList[index].createdAt,
+                                  updatedAt: value.groupList[index].updatedAt,
+                                );
+                              },
+                        );
+                      },
                     );
                   },
                 );
