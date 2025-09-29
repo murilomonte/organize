@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:organize/src/utility/constraints.dart';
+import 'package:organize/src/views/group/create_group_modal.dart';
 import 'package:organize/src/views/home/home_screen.dart';
 
 class Navigation extends StatefulWidget {
@@ -51,7 +52,17 @@ class _NavigationState extends State<Navigation> {
             ),
             body: views[_currentIndex],
             floatingActionButton: FloatingActionButton.extended(
-              onPressed: () {},
+              onPressed: () {
+                showGeneralDialog(
+                  context: context,
+                  fullscreenDialog: false,
+                  barrierDismissible: true,
+                  barrierLabel: "Close",
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return CreateGroupModal();
+                  },
+                );
+              },
               label: Text('Add task'),
               icon: Icon(Icons.add),
             ),
@@ -72,7 +83,21 @@ class _NavigationState extends State<Navigation> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+                          IconButton(
+                            onPressed: () {
+                              showGeneralDialog(
+                                context: context,
+                                fullscreenDialog: false,
+                                barrierDismissible: true,
+                                barrierLabel: "Close",
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) {
+                                      return CreateGroupModal();
+                                    },
+                              );
+                            },
+                            icon: Icon(Icons.add),
+                          ),
                           SizedBox(
                             width: 500,
                             child: TabBar(

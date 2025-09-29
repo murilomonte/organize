@@ -7,11 +7,20 @@ class OrganizeModal extends StatelessWidget {
   final double? maxWidth;
   final double? maxHeight;
 
+  // Appbar
+  final String? title;
+  final List<Widget>? actions;
+
+  // BottomBar
+  final Widget? bottomBar;
+
   const OrganizeModal({
     super.key,
     required this.children,
     this.maxWidth,
     this.maxHeight,
+    this.title,
+    this.actions, this.bottomBar,
   });
 
   @override
@@ -22,7 +31,7 @@ class OrganizeModal extends StatelessWidget {
           return Material(
             child: Column(
               children: [
-                OrganizeAppBar(),
+                OrganizeAppBar(title: title, actions: actions),
                 Expanded(
                   child: SizedBox(
                     width: double.infinity,
@@ -35,6 +44,10 @@ class OrganizeModal extends StatelessWidget {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: bottomBar
+                ),
               ],
             ),
           );
@@ -44,11 +57,11 @@ class OrganizeModal extends StatelessWidget {
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 maxWidth: maxWidth ?? 800,
-                maxHeight: maxHeight ?? double.infinity
+                maxHeight: maxHeight ?? double.infinity,
               ),
               child: Column(
                 children: [
-                  OrganizeAppBar(),
+                  OrganizeAppBar(title: title, actions: actions),
                   Expanded(
                     child: SizedBox(
                       width: double.infinity,
@@ -61,6 +74,10 @@ class OrganizeModal extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: bottomBar
+                ),
                 ],
               ),
             ),

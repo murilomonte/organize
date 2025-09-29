@@ -1,4 +1,6 @@
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
+import 'package:organize/src/data/database/app_database.dart';
 import 'package:organize/src/data/repositories/organize_repository.dart';
 import 'package:organize/src/models/group_model.dart';
 
@@ -14,6 +16,7 @@ class GroupViewModel extends ChangeNotifier {
   }
 
   void _updateGroupList() async {
+    errorMsg = '';
     isLoading = true;
     notifyListeners();
 
@@ -29,5 +32,22 @@ class GroupViewModel extends ChangeNotifier {
     }
     isLoading = false;
     notifyListeners();
+  }
+
+  void createGroup({required String title, required String description}) async {
+    final result = await repo.createGroup(
+      GroupsCompanion(title: Value(title), description: Value(description)),
+    );
+
+    switch (result) {
+      case Success():
+        break;
+
+      case Failure(message: String message):
+        errorMsg = message;
+        break;
+    }
+
+    _updateGroupList();
   }
 }

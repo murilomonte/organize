@@ -18,6 +18,10 @@ class HomeScreen extends StatelessWidget {
             constraints: BoxConstraints(maxWidth: 800),
             child: Consumer<GroupViewModel>(
               builder: (context, value, child) {
+                if (value.errorMsg.isNotEmpty) {
+                  return Center(child: Text(value.errorMsg),);
+                }
+
                 if (value.isLoading) {
                   return Center(child: CircularProgressIndicator());
                 }
@@ -29,7 +33,7 @@ class HomeScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Não há nenhum conjunto de tarefas ainda. ',
+                          'There is no group yet',
                           style: TextStyle(fontSize: 20),
                           textAlign: TextAlign.center,
                         ),
@@ -46,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(15),
                             child: Text(
-                              'Adicionar um conjunto',
+                              'Add',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
