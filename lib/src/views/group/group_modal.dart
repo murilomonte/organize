@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:organize/src/_core/widgets/description_button.dart';
 import 'package:organize/src/_core/widgets/organize_item_tile.dart';
 import 'package:organize/src/_core/widgets/organize_modal.dart';
 import 'package:organize/src/data/database/status_enum.dart';
@@ -34,34 +35,10 @@ class GroupModal extends StatelessWidget {
         Row(spacing: 20, children: [Text('$createdAt'), Text('$updatedAt')]),
         SizedBox(height: 20),
         if (taskList.isEmpty)
-          Expanded(
-            child: Center(
-              child: Column(
-                spacing: 10,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Não há nenhum conjunto de tarefas ainda. ',
-                    style: TextStyle(fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
-                  ElevatedButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    onPressed: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Text(
-                        'Adicionar um conjunto',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          DescriptionButton(
+            description: 'There is no task yet',
+            buttonText: 'Add',
+            onTap: () {},
           ),
 
         if (taskList.isNotEmpty)
@@ -82,7 +59,6 @@ class GroupModal extends StatelessWidget {
                       barrierDismissible: true,
                       barrierLabel: "Close",
                       pageBuilder: (context, animation, secondaryAnimation) {
-
                         return TasksModal(
                           id: taskList[index].id,
                           title: taskList[index].title,

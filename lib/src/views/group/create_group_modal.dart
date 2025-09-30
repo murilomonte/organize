@@ -21,49 +21,34 @@ class _CreateGroupModalState extends State<CreateGroupModal> {
     return OrganizeModal(
       title: 'Create group',
       maxHeight: 300,
-      bottomBar: Row(
-        spacing: 10,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextButton.icon(
-            style: ButtonStyle(
-              padding: WidgetStatePropertyAll(
-                EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-              ),
+      maxWidth: 500,
+      actions: [
+        TextButton.icon(
+          style: ButtonStyle(
+            padding: WidgetStatePropertyAll(
+              EdgeInsets.symmetric(horizontal: 30, vertical: 20),
             ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            label: Text('Cancel'),
-            icon: Icon(Icons.cancel_outlined),
           ),
-          TextButton.icon(
-            style: ButtonStyle(
-              padding: WidgetStatePropertyAll(
-                EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-              ),
-            ),
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                context.read<GroupViewModel>().createGroup(
-                  title: _titleController.text,
-                  description: _descriptionController.text,
-                );
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              context.read<GroupViewModel>().createGroup(
+                title: _titleController.text,
+                description: _descriptionController.text,
+              );
 
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    duration: Duration(seconds: 2),
-                    content: Text('Adding group...'),
-                  ),
-                );
-              }
-            },
-            label: Text('Add'),
-            icon: Icon(Icons.add_box_outlined),
-          ),
-        ],
-      ),
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  duration: Duration(seconds: 2),
+                  content: Text('Adding group...'),
+                ),
+              );
+            }
+          },
+          label: Text('Add group'),
+          icon: Icon(Icons.add),
+        ),
+      ],
       children: [
         Form(
           key: _formKey,
