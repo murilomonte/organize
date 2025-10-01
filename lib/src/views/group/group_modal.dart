@@ -4,6 +4,7 @@ import 'package:organize/src/_core/widgets/organize_item_tile.dart';
 import 'package:organize/src/_core/widgets/organize_modal.dart';
 import 'package:organize/src/data/database/status_enum.dart';
 import 'package:organize/src/models/task_model.dart';
+import 'package:organize/src/views/task/create_task_modal.dart';
 import 'package:organize/src/views/task/task_modal.dart';
 
 class GroupModal extends StatelessWidget {
@@ -38,7 +39,17 @@ class GroupModal extends StatelessWidget {
           DescriptionButton(
             description: 'There is no task yet',
             buttonText: 'Add',
-            onTap: () {},
+            onTap: () {
+              showGeneralDialog(
+                  context: context,
+                  fullscreenDialog: false,
+                  barrierDismissible: true,
+                  barrierLabel: "Close",
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return CreateTaskModal(groupId: id,);
+                  },
+                );
+            },
           ),
 
         if (taskList.isNotEmpty)

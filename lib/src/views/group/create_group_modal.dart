@@ -12,9 +12,9 @@ class CreateGroupModal extends StatefulWidget {
 }
 
 class _CreateGroupModalState extends State<CreateGroupModal> {
-  final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  final _createGroupForm = GlobalKey<FormState>();
+  final _groupTitleController = TextEditingController();
+  final _groupDescriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +30,10 @@ class _CreateGroupModalState extends State<CreateGroupModal> {
             ),
           ),
           onPressed: () {
-            if (_formKey.currentState!.validate()) {
+            if (_createGroupForm.currentState!.validate()) {
               context.read<GroupViewModel>().createGroup(
-                title: _titleController.text,
-                description: _descriptionController.text,
+                title: _groupTitleController.text,
+                description: _groupDescriptionController.text,
               );
 
               Navigator.of(context).pop();
@@ -51,12 +51,12 @@ class _CreateGroupModalState extends State<CreateGroupModal> {
       ],
       children: [
         Form(
-          key: _formKey,
+          key: _createGroupForm,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFormField(
-                controller: _titleController,
+                controller: _groupTitleController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   label: Text('Title'),
@@ -70,7 +70,7 @@ class _CreateGroupModalState extends State<CreateGroupModal> {
               ),
               Gap(10),
               TextFormField(
-                controller: _descriptionController,
+                controller: _groupDescriptionController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   label: Text('Description'),

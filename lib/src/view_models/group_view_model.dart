@@ -50,4 +50,32 @@ class GroupViewModel extends ChangeNotifier {
 
     _updateGroupList();
   }
+
+  void createTask({
+    required int groupId,
+    required String title,
+    required String description,
+    required int score,
+  }) async {
+    final result = await repo.createTask(
+      TasksCompanion(
+        group: Value(groupId),
+        title: Value(title),
+        description: Value(description),
+        score: Value(score),
+      ),
+    );
+    print(result);
+
+    switch (result) {
+      case Success():
+        break;
+
+      case Failure(message: String message):
+        errorMsg = message;
+        break;
+    }
+
+    _updateGroupList();
+  }
 }
