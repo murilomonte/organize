@@ -6,7 +6,6 @@ class OrganizeItemTile extends StatelessWidget {
   final String title;
   final String? description;
   final Status status;
-  final List internalList;
   final void Function()? onTap;
 
   const OrganizeItemTile({
@@ -15,31 +14,8 @@ class OrganizeItemTile extends StatelessWidget {
     required this.title,
     this.description,
     required this.status,
-    required this.internalList,
     this.onTap,
   });
-
-  int _tasksDoneCount() {
-    if (internalList.isNotEmpty) {
-      int tasksDone = 0;
-
-      internalList
-          .where((element) => element.status == Status.completed)
-          .forEach((element) => tasksDone++);
-      return tasksDone;
-    }
-    return 0;
-  }
-
-  double _checkPercentage() {
-    if (internalList.isNotEmpty) {
-      int tasksDone = _tasksDoneCount();
-      double percentage = (tasksDone / internalList.length) * 100;
-
-      return percentage / 100;
-    }
-    return 0;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,22 +57,7 @@ class OrganizeItemTile extends StatelessWidget {
                     ),
                     if (description != null)
                       Text(description!, overflow: TextOverflow.ellipsis),
-                    if (internalList.isNotEmpty)
-                      Row(
-                        children: [
-                          Expanded(
-                            child: LinearProgressIndicator(
-                              borderRadius: BorderRadius.circular(100),
-                              minHeight: 5,
-                              value: _checkPercentage(),
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          Text(
-                            '${_tasksDoneCount()}/${internalList.length} done',
-                          ),
-                        ],
-                      ),
+                    
                   ],
                 ),
               ),

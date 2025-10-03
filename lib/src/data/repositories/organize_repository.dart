@@ -35,7 +35,7 @@ class OrganizeRepository {
     required this.statusDao,
   });
 
-  Future<Result<List<GroupModel>>> getAllGroupWithTasksAndSubtasks() async {
+ Future<Result<List<GroupModel>>> getAllGroupWithTasksAndSubtasks() async {
     // TODO: melhorar tratamento de erro
     try {
       List<GroupModel> result = [];
@@ -60,6 +60,54 @@ class OrganizeRepository {
           groupModel.tasks.add(taskModel);
         });
 
+        result.add(groupModel);
+      }
+
+      return Success(result);
+    } catch (err) {
+      return Failure("Unexpected error: $err");
+    }
+  }
+
+  Future<Result<List<GroupModel>>> getAllGroups() async {
+    try {
+      List<GroupModel> result = [];
+      List<Group> groups = await groupsDao.getAllGroups();
+
+      for (var group in groups) {
+        GroupModel groupModel = GroupModel.fromEntity(group);
+        result.add(groupModel);
+      }
+
+      return Success(result);
+    } catch (err) {
+      return Failure("Unexpected error: $err");
+    }
+  }
+
+  Future<Result<List<TaskModel>>> getAllTasks() async {
+    try {
+      List<TaskModel> result = [];
+      List<Task> tasks = await tasksDao.getAllTasks();
+
+      for (var task in tasks) {
+        TaskModel groupModel = TaskModel.fromEntity(task);
+        result.add(groupModel);
+      }
+
+      return Success(result);
+    } catch (err) {
+      return Failure("Unexpected error: $err");
+    }
+  }
+
+  Future<Result<List<SubtaskModel>>> getAllSubtasks() async {
+    try {
+      List<SubtaskModel> result = [];
+      List<Subtask> subtasks = await subtasksDao.getAllSubtasks();
+
+      for (var subtask in subtasks) {
+        SubtaskModel groupModel = SubtaskModel.fromEntity(subtask);
         result.add(groupModel);
       }
 
