@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:organize/src/_core/widgets/description_button.dart';
 import 'package:organize/src/_core/widgets/organize_item_tile.dart';
+import 'package:organize/src/_core/widgets/organize_menu_anchor.dart';
 import 'package:organize/src/data/database/status_enum.dart';
+import 'package:organize/src/models/group_model.dart';
 import 'package:organize/src/models/task_model.dart';
 import 'package:organize/src/view_models/group_view_model.dart';
 import 'package:organize/src/views/base/base_view.dart';
+import 'package:organize/src/views/group/group_form_view.dart';
 import 'package:organize/src/views/task/task_form_view.dart';
 import 'package:organize/src/views/task/task_view.dart';
 import 'package:provider/provider.dart';
@@ -44,9 +47,40 @@ class GroupView extends StatelessWidget {
         enableSearch: false,
         initialSelection: status,
         dropdownMenuEntries: Status.entries,
-        onSelected: (value) {},
+        onSelected: (value) {
+          context.read<GroupViewModel>().updateGroup(id: id, status: value);
+        },
       ),
-      dropdownMenu: IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+      dropdownMenu: OrganizeMenuAnchor(
+        menuChildren: [
+          MenuItemButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GroupFormView(
+                    group: GroupModel(
+                      id: id,
+                      title: title,
+                      description: description,
+                      status: status,
+                      createdAt: createdAt,
+                      updatedAt: updatedAt,
+                    ),
+                  ),
+                ),
+              );
+            },
+            leadingIcon: Icon(Icons.edit_outlined),
+            child: Text('Edit'),
+          ),
+          MenuItemButton(
+            onPressed: () {},
+            leadingIcon: Icon(Icons.delete_outlined),
+            child: Text('Delete'),
+          ),
+        ],
+      ),
       content: Consumer<GroupViewModel>(
         builder: (context, value, child) {
           List<TaskModel> taskList = value.getTaskList(id);
@@ -107,20 +141,9 @@ class GroupView extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => Scaffold(
-          //       appBar: AppBar(),
-          //       body: Center(child: Text('Form')),
-          //     ),
-          //   ),
-          // );
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => TaskFormView(groupId: id,)
-            ),
+            MaterialPageRoute(builder: (context) => TaskFormView(groupId: id)),
           );
         },
         label: Text('Add task'),

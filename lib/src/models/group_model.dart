@@ -1,6 +1,5 @@
 import 'package:organize/src/data/database/app_database.dart';
 import 'package:organize/src/data/database/status_enum.dart';
-import 'package:organize/src/models/task_model.dart';
 
 class GroupModel {
   final int id;
@@ -9,7 +8,6 @@ class GroupModel {
   final Status status;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final List<TaskModel> tasks;
 
   GroupModel({
     required this.id,
@@ -18,7 +16,6 @@ class GroupModel {
     required this.status,
     required this.createdAt,
     required this.updatedAt,
-    required this.tasks,
   });
 
   @override
@@ -31,7 +28,6 @@ class GroupModel {
   "status": $status,
   "createdAt": "$createdAt",
   "updatedAt": "$updatedAt",
-  "tasks": $tasks
 }''';
   }
 
@@ -50,7 +46,6 @@ class GroupModel {
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? DateTime.now(),
-      tasks: tasks,
     );
   }
 
@@ -62,7 +57,6 @@ class GroupModel {
       status: group.status,
       createdAt: group.createdAt,
       updatedAt: group.updatedAt,
-      tasks: [],
     );
   }
 }

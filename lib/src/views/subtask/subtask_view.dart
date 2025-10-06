@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:organize/src/data/database/status_enum.dart';
+import 'package:organize/src/view_models/group_view_model.dart';
 import 'package:organize/src/views/base/base_view.dart';
+import 'package:provider/provider.dart';
 
 class SubtaskView extends StatelessWidget {
   final int id;
@@ -37,7 +39,9 @@ class SubtaskView extends StatelessWidget {
         enableSearch: false,
         initialSelection: status,
         dropdownMenuEntries: Status.entries,
-        onSelected: (value) {},
+        onSelected: (value) {
+          context.read<GroupViewModel>().updateSubtask(id: id, status: value);
+        },
       ),
       dropdownMenu: IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
       floatingActionButton: FloatingActionButton.extended(

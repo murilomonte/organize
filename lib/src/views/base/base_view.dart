@@ -63,7 +63,7 @@ class BaseView extends StatelessWidget {
                   ),
                 ),
               Gap(10),
-              IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+              dropdownMenu,
             ],
           ),
           SliverToBoxAdapter(

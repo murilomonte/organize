@@ -42,7 +42,13 @@ class _SubtaskFormViewState extends State<SubtaskFormView> {
           description: description,
         );
       } else {
-        // TODO: implementar
+        context.read<GroupViewModel>().updateGroup(
+          id: widget.subtask!.id,
+          title: title != widget.subtask!.title ? title : null,
+          description: description != widget.subtask!.description
+              ? description
+              : null,
+        );
       }
     }
   }

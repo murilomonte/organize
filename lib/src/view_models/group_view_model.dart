@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:organize/src/data/database/app_database.dart';
+import 'package:organize/src/data/database/status_enum.dart';
 import 'package:organize/src/data/repositories/organize_repository.dart';
 import 'package:organize/src/models/group_model.dart';
 import 'package:organize/src/models/subtask_model.dart';
@@ -65,7 +66,10 @@ class GroupViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void createGroup({required String title, required String? description}) async {
+  void createGroup({
+    required String title,
+    required String? description,
+  }) async {
     final result = await repo.createGroup(
       GroupsCompanion(title: Value(title), description: Value(description)),
     );
@@ -121,6 +125,94 @@ class GroupViewModel extends ChangeNotifier {
         title: Value(title),
         description: Value(description),
         score: Value(score),
+      ),
+    );
+
+    switch (result) {
+      case Success():
+        break;
+
+      case Failure(message: String message):
+        errorMsg = message;
+        break;
+    }
+
+    _updateLists();
+  }
+
+  void updateGroup({
+    required int id,
+    String? title,
+    String? description,
+    Status? status,
+  }) async {
+    final result = await repo.updateGroup(
+      GroupsCompanion(
+        id: Value(id),
+        title: title != null ? Value(title) : Value.absent(),
+        description: description != null ? Value(description) : Value.absent(),
+        status: status != null ? Value(status) : Value.absent(),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+
+    switch (result) {
+      case Success():
+        break;
+
+      case Failure(message: String message):
+        errorMsg = message;
+        break;
+    }
+
+    _updateLists();
+  }
+
+  void updateTask({
+    required int id,
+    String? title,
+    String? description,
+    Status? status,
+    int? score,
+  }) async {
+    final result = await repo.updateTask(
+      TasksCompanion(
+        id: Value(id),
+        title: title != null ? Value(title) : Value.absent(),
+        description: description != null ? Value(description) : Value.absent(),
+        status: status != null ? Value(status) : Value.absent(),
+        score: score != null ? Value(score) : Value.absent(),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+
+    switch (result) {
+      case Success():
+        break;
+
+      case Failure(message: String message):
+        errorMsg = message;
+        break;
+    }
+
+    _updateLists();
+  }
+
+  void updateSubtask({
+    required int id,
+    String? title,
+    String? description,
+    Status? status,
+    int? score,
+  }) async {
+    final result = await repo.updateSubtask(
+      SubtasksCompanion(
+        id: Value(id),
+        title: title != null ? Value(title) : Value.absent(),
+        description: description != null ? Value(description) : Value.absent(),
+        status: status != null ? Value(status) : Value.absent(),
+        score: score != null ? Value(score) : Value.absent(),
+        updatedAt: Value(DateTime.now()),
       ),
     );
 

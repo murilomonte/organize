@@ -1,6 +1,5 @@
 import 'package:organize/src/data/database/app_database.dart';
 import 'package:organize/src/data/database/status_enum.dart';
-import 'package:organize/src/models/subtask_model.dart';
 
 class TaskModel {
   final int id;
@@ -11,7 +10,6 @@ class TaskModel {
   final String? description;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final List<SubtaskModel> subtasks;
 
   TaskModel({
     required this.id,
@@ -22,7 +20,6 @@ class TaskModel {
     this.description,
     required this.createdAt,
     required this.updatedAt,
-    required this.subtasks,
   });
 
   @override
@@ -37,7 +34,6 @@ class TaskModel {
   "description": ${description != null ? '"$description"' : null},
   "createdAt": "$createdAt",
   "updatedAt": "$updatedAt",
-  "subtasks": $subtasks
 }''';
   }
 
@@ -59,7 +55,6 @@ class TaskModel {
       description: description ?? this.description,
       createdAt: createdAt,
       updatedAt: updatedAt ?? DateTime.now(),
-      subtasks: subtasks,
     );
   }
 
@@ -73,7 +68,6 @@ class TaskModel {
       status: task.status,
       createdAt: task.createdAt,
       updatedAt: task.updatedAt,
-      subtasks: [],
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:organize/src/_core/widgets/description_button.dart';
 import 'package:organize/src/_core/widgets/organize_item_tile.dart';
-import 'package:organize/src/data/database/status_enum.dart';
 import 'package:organize/src/models/group_model.dart';
 import 'package:organize/src/view_models/group_view_model.dart';
 import 'package:organize/src/views/group/group_view.dart';
@@ -43,7 +42,7 @@ class HomeScreen extends StatelessWidget {
                     id: groupList[index].id,
                     title: groupList[index].title,
                     description: groupList[index].description,
-                    status: Status.pending,
+                    status: groupList[index].status,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -52,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                             id: groupList[index].id,
                             title: groupList[index].title,
                             description: groupList[index].description,
-                            status: Status.pending,
+                            status: groupList[index].status,
                             createdAt: groupList[index].createdAt,
                             updatedAt: groupList[index].updatedAt,
                           ),

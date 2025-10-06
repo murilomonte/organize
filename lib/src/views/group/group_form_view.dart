@@ -37,7 +37,13 @@ class _GroupFormViewState extends State<GroupFormView> {
           description: description,
         );
       } else {
-        // TODO: implementar
+        context.read<GroupViewModel>().updateGroup(
+          id: widget.group!.id,
+          title: title != widget.group!.title ? title : null,
+          description: description != widget.group!.description
+              ? description
+              : null,
+        );
       }
     }
   }
@@ -114,7 +120,10 @@ class _GroupFormViewState extends State<GroupFormView> {
                   Navigator.pop(context);
                 },
                 icon: Icon(Icons.add),
-                label: Text('Add', style: TextStyle(fontWeight: FontWeight.bold)),
+                label: Text(
+                  'Add',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),

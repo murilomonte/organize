@@ -5,9 +5,9 @@ import 'package:organize/src/view_models/group_view_model.dart';
 import 'package:provider/provider.dart';
 
 class TaskFormView extends StatefulWidget {
-  final TaskModel? group;
+  final TaskModel? task;
   final int groupId;
-  const TaskFormView({super.key, this.group, required this.groupId});
+  const TaskFormView({super.key, this.task, required this.groupId});
 
   @override
   State<TaskFormView> createState() => _TaskFormViewState();
@@ -23,9 +23,9 @@ class _TaskFormViewState extends State<TaskFormView> {
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController(text: widget.group?.title ?? '');
+    _titleController = TextEditingController(text: widget.task?.title ?? '');
     _descriptionController = TextEditingController(
-      text: widget.group?.description ?? '',
+      text: widget.task?.description ?? '',
     );
   }
 
@@ -34,7 +34,7 @@ class _TaskFormViewState extends State<TaskFormView> {
       final title = _titleController.text;
       final description = _descriptionController.text;
 
-      if (widget.group == null) {
+      if (widget.task == null) {
         context.read<GroupViewModel>().createTask(
           groupId: widget.groupId,
           title: title,
@@ -42,7 +42,13 @@ class _TaskFormViewState extends State<TaskFormView> {
           description: description,
         );
       } else {
-        // TODO: implementar
+        context.read<GroupViewModel>().updateGroup(
+          id: widget.task!.id,
+          title: title != widget.task!.title ? title : null,
+          description: description != widget.task!.description
+              ? description
+              : null,
+        );
       }
     }
   }
