@@ -68,6 +68,7 @@ class TaskModel {
       id: task.id,
       groupId: task.group,
       title: task.title,
+      description: task.description,
       score: task.score,
       status: task.status,
       createdAt: task.createdAt,

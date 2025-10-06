@@ -64,6 +64,7 @@ class SubtaskModel {
       id: subtask.id,
       taskId: subtask.task,
       title: subtask.title,
+      description: subtask.description,
       score: subtask.score,
       status: subtask.status,
       createdAt: subtask.createdAt,
