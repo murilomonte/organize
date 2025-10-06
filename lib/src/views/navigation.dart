@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:organize/src/views/group/group_form_view.dart';
 import 'package:organize/src/views/home/home_screen.dart';
 
 class Navigation extends StatefulWidget {
@@ -52,10 +53,7 @@ class _NavigationState extends State<Navigation> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Scaffold(
-                appBar: AppBar(),
-                body: Center(child: Text('Form')),
-              ),
+              builder: (context) => GroupFormView()
             ),
           );
         },

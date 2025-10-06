@@ -5,8 +5,8 @@ import 'package:organize/src/data/database/status_enum.dart';
 import 'package:organize/src/models/subtask_model.dart';
 import 'package:organize/src/view_models/group_view_model.dart';
 import 'package:organize/src/views/base/base_view.dart';
+import 'package:organize/src/views/subtask/subtask_form_view.dart';
 import 'package:organize/src/views/subtask/subtask_view.dart';
-import 'package:organize/src/views/task/create_task_modal.dart';
 import 'package:provider/provider.dart';
 
 class TaskView extends StatelessWidget {
@@ -72,7 +72,7 @@ class TaskView extends StatelessWidget {
               hasScrollBody: false,
               child: Center(
                 child: DescriptionButton(
-                  description: 'There is no task yet',
+                  description: 'There is no subtask yet',
                   buttonText: 'Add',
                   onTap: () {
                     showGeneralDialog(
@@ -80,7 +80,7 @@ class TaskView extends StatelessWidget {
                       barrierDismissible: true,
                       barrierLabel: "Close",
                       pageBuilder: (context, animation, secondaryAnimation) {
-                        return CreateTaskModal(groupId: id);
+                        return SubtaskFormView(taskId: id);
                       },
                     );
                   },
@@ -125,10 +125,7 @@ class TaskView extends StatelessWidget {
          Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Scaffold(
-                appBar: AppBar(),
-                body: Center(child: Text('Form')),
-              ),
+              builder: (context) => SubtaskFormView(taskId: id)
             ),
           );
         },

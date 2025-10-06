@@ -5,7 +5,7 @@ import 'package:organize/src/data/database/status_enum.dart';
 import 'package:organize/src/models/task_model.dart';
 import 'package:organize/src/view_models/group_view_model.dart';
 import 'package:organize/src/views/base/base_view.dart';
-import 'package:organize/src/views/task/create_task_modal.dart';
+import 'package:organize/src/views/task/task_form_view.dart';
 import 'package:organize/src/views/task/task_view.dart';
 import 'package:provider/provider.dart';
 
@@ -64,7 +64,7 @@ class GroupView extends StatelessWidget {
                       barrierDismissible: true,
                       barrierLabel: "Close",
                       pageBuilder: (context, animation, secondaryAnimation) {
-                        return CreateTaskModal(groupId: id);
+                        return TaskFormView(groupId: id);
                       },
                     );
                   },
@@ -84,7 +84,6 @@ class GroupView extends StatelessWidget {
                   status: taskList[index].status,
                   score: taskList[index].score,
                   onTap: () {
-                    print(taskList[index]);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -108,13 +107,19 @@ class GroupView extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => Scaffold(
+          //       appBar: AppBar(),
+          //       body: Center(child: Text('Form')),
+          //     ),
+          //   ),
+          // );
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Scaffold(
-                appBar: AppBar(),
-                body: Center(child: Text('Form')),
-              ),
+              builder: (context) => TaskFormView(groupId: id,)
             ),
           );
         },

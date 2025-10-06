@@ -65,7 +65,7 @@ class GroupViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void createGroup({required String title, required String description}) async {
+  void createGroup({required String title, required String? description}) async {
     final result = await repo.createGroup(
       GroupsCompanion(title: Value(title), description: Value(description)),
     );

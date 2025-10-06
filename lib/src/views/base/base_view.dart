@@ -48,15 +48,18 @@ class BaseView extends StatelessWidget {
                     color: Theme.of(context).colorScheme.primaryContainer,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Row(
-                    spacing: 2,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.diamond_outlined, size: 15),
-                      Text(score!.toString(), style: TextStyle(fontSize: 13)),
-                      Text('pts'),
-                    ],
+                  child: Tooltip(
+                    message: 'Points',
+                    child: Row(
+                      spacing: 2,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.diamond_outlined, size: 15),
+                        Text(score!.toString(), style: TextStyle(fontSize: 13)),
+                        Text('pts'),
+                      ],
+                    ),
                   ),
                 ),
               Gap(10),
@@ -69,7 +72,7 @@ class BaseView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: TextStyle(fontSize: 50)),
+                  Text(title, style: TextStyle(fontSize: 50, height: 1)),
                   Gap(5),
                   if (description != null && description != '')
                     Text(description!, style: TextStyle(fontSize: 16)),
