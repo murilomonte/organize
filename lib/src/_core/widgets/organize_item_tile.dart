@@ -6,6 +6,7 @@ class OrganizeItemTile extends StatelessWidget {
   final String title;
   final String? description;
   final Status status;
+  final int? score;
   final void Function()? onTap;
 
   const OrganizeItemTile({
@@ -14,6 +15,7 @@ class OrganizeItemTile extends StatelessWidget {
     required this.title,
     this.description,
     required this.status,
+    this.score,
     this.onTap,
   });
 
@@ -37,8 +39,14 @@ class OrganizeItemTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      spacing: 10,
+                      spacing: 5,
                       children: [
+                        if (status == Status.completed)
+                          Icon(
+                            Icons.task_alt,
+                            size: 20,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         Text(
                           title,
                           style: TextStyle(
@@ -47,17 +55,15 @@ class OrganizeItemTile extends StatelessWidget {
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
-                        if (status == Status.completed)
-                          Icon(
-                            Icons.task_alt,
-                            size: 20,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
                       ],
                     ),
-                    if (description != null)
-                      Text(description!, overflow: TextOverflow.ellipsis),
-                    
+
+                    if (description != null && description != '')
+                      Text(
+                        description!,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
                   ],
                 ),
               ),

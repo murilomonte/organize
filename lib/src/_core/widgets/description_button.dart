@@ -14,33 +14,31 @@ class DescriptionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Center(
-        child: Column(
-          spacing: 10,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              description,
-              style: TextStyle(fontSize: 20),
-              textAlign: TextAlign.center,
+    return Center(
+      child: Column(
+        spacing: 10,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            description,
+            style: TextStyle(fontSize: 20),
+            textAlign: TextAlign.center,
+          ),
+          ElevatedButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
             ),
-            ElevatedButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              ),
-              onPressed: onTap,
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  buttonText,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+            onPressed: onTap,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                buttonText,
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

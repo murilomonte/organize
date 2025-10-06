@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:organize/src/views/group/create_group_modal.dart';
 import 'package:organize/src/views/home/home_screen.dart';
 
 class Navigation extends StatefulWidget {
@@ -50,17 +49,17 @@ class _NavigationState extends State<Navigation> {
       body: views[_currentIndex],
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          showGeneralDialog(
-            context: context,
-            fullscreenDialog: false,
-            barrierDismissible: true,
-            barrierLabel: "Close",
-            pageBuilder: (context, animation, secondaryAnimation) {
-              return CreateGroupModal();
-            },
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Scaffold(
+                appBar: AppBar(),
+                body: Center(child: Text('Form')),
+              ),
+            ),
           );
         },
-        label: Text('Add task'),
+        label: Text('Add Group'),
         icon: Icon(Icons.add),
       ),
     );
