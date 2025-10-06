@@ -27,12 +27,14 @@ class _TaskFormViewState extends State<TaskFormView> {
     _descriptionController = TextEditingController(
       text: widget.task?.description ?? '',
     );
+    _points = widget.task?.score.toDouble() ?? 0;
   }
 
   void _saveGroup() {
     if (_formKey.currentState!.validate()) {
       final title = _titleController.text;
       final description = _descriptionController.text;
+      final points = _points.toInt();
 
       if (widget.task == null) {
         context.read<GroupViewModel>().createTask(
@@ -42,12 +44,13 @@ class _TaskFormViewState extends State<TaskFormView> {
           description: description,
         );
       } else {
-        context.read<GroupViewModel>().updateGroup(
+        context.read<GroupViewModel>().updateTask(
           id: widget.task!.id,
           title: title != widget.task!.title ? title : null,
           description: description != widget.task!.description
               ? description
               : null,
+          score: points != widget.task!.score ? points : null,
         );
       }
     }
@@ -96,7 +99,6 @@ class _TaskFormViewState extends State<TaskFormView> {
                       Expanded(
                         flex: 8,
                         child: Slider(
-                          
                           padding: EdgeInsets.all(0),
                           // ignore: deprecated_member_use
                           year2023: false,

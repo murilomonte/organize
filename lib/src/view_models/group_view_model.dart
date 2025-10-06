@@ -15,8 +15,14 @@ class GroupViewModel extends ChangeNotifier {
   List<SubtaskModel> _subtasklist = [];
 
   List<GroupModel> getGroupList() => _groupList;
-  List<TaskModel> getTaskList(int groupId) => _taskList.where((e) => e.groupId == groupId).toList();
-  List<SubtaskModel> getSubtaskList(int taskId) => _subtasklist.where((e) => e.taskId == taskId).toList();
+  List<TaskModel> getTaskList(int groupId) =>
+      _taskList.where((e) => e.groupId == groupId).toList();
+  List<SubtaskModel> getSubtaskList(int taskId) =>
+      _subtasklist.where((e) => e.taskId == taskId).toList();
+
+  GroupModel getGroup(int id) => _groupList.where((e) => e.id == id,).toList()[0];
+  TaskModel getTask(int id) => _taskList.where((e) => e.id == id,).toList()[0];
+  SubtaskModel getSubtask(int id) => _subtasklist.where((e) => e.id == id,).toList()[0];
 
   String errorMsg = '';
   bool isLoading = false;

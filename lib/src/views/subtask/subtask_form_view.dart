@@ -27,12 +27,14 @@ class _SubtaskFormViewState extends State<SubtaskFormView> {
     _descriptionController = TextEditingController(
       text: widget.subtask?.description ?? '',
     );
+    _points = widget.subtask?.score.toDouble() ?? 0;
   }
 
   void _save() {
     if (_formKey.currentState!.validate()) {
       final title = _titleController.text;
       final description = _descriptionController.text;
+      final points = _points.toInt();
 
       if (widget.subtask == null) {
         context.read<GroupViewModel>().createSubtask(
@@ -42,12 +44,13 @@ class _SubtaskFormViewState extends State<SubtaskFormView> {
           description: description,
         );
       } else {
-        context.read<GroupViewModel>().updateGroup(
+        context.read<GroupViewModel>().updateSubtask(
           id: widget.subtask!.id,
           title: title != widget.subtask!.title ? title : null,
           description: description != widget.subtask!.description
               ? description
               : null,
+          score: points != widget.subtask!.score ? points : null,
         );
       }
     }

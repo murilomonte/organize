@@ -47,14 +47,8 @@ class HomeScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => GroupView(
-                            id: groupList[index].id,
-                            title: groupList[index].title,
-                            description: groupList[index].description,
-                            status: groupList[index].status,
-                            createdAt: groupList[index].createdAt,
-                            updatedAt: groupList[index].updatedAt,
-                          ),
+                          builder: (context) =>
+                              GroupView(id: groupList[index].id),
                         ),
                       );
                     },
