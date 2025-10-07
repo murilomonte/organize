@@ -61,7 +61,9 @@ class _TaskFormViewState extends State<TaskFormView> {
     return SafeArea(
       top: false,
       child: Scaffold(
-        appBar: AppBar(title: Text('New task')),
+        appBar: AppBar(
+          title: Text(widget.task == null ? 'New task' : 'Edit task'),
+        ),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20),

@@ -74,9 +74,18 @@ class SubtaskView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Scaffold(
-                    appBar: AppBar(),
-                    body: Center(child: Text('Form')),
+                  builder: (context) => SubtaskFormView(
+                    subtask: SubtaskModel(
+                      id: id,
+                      score: subtask.score,
+                      taskId: subtask.taskId,
+                      title: subtask.title,
+                      description: subtask.description,
+                      status: subtask.status,
+                      createdAt: subtask.createdAt,
+                      updatedAt: subtask.updatedAt,
+                    ),
+                    taskId: subtask.taskId,
                   ),
                 ),
               );

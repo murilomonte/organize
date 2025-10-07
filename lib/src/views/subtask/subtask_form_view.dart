@@ -61,7 +61,7 @@ class _SubtaskFormViewState extends State<SubtaskFormView> {
     return SafeArea(
       top: false,
       child: Scaffold(
-        appBar: AppBar(title: Text('New subtask')),
+        appBar: AppBar(title: Text(widget.subtask == null ? 'New subtask' : 'Edit subtask')),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20),

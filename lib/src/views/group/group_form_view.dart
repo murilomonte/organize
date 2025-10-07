@@ -53,7 +53,7 @@ class _GroupFormViewState extends State<GroupFormView> {
     return SafeArea(
       top: false,
       child: Scaffold(
-        appBar: AppBar(title: Text('New group')),
+        appBar: AppBar(title: Text(widget.group == null ? 'New group' : 'Edit group')),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20),

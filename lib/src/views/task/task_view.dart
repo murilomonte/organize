@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:organize/src/_core/widgets/description_button.dart';
 import 'package:organize/src/_core/widgets/organize_item_tile.dart';
 import 'package:organize/src/_core/widgets/organize_menu_anchor.dart';
 import 'package:organize/src/data/database/status_enum.dart';
@@ -91,20 +90,12 @@ class TaskView extends StatelessWidget {
                 return SliverFillRemaining(
                   hasScrollBody: false,
                   child: Center(
-                    child: DescriptionButton(
-                      description: 'There is no subtask yet',
-                      buttonText: 'Add',
-                      onTap: () {
-                        showGeneralDialog(
-                          context: context,
-                          barrierDismissible: true,
-                          barrierLabel: "Close",
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) {
-                                return SubtaskFormView(taskId: id);
-                              },
-                        );
-                      },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('There is no task yet'),
+                        Text('Add one!'),
+                      ],
                     ),
                   ),
                 );

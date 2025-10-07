@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:organize/src/_core/widgets/description_button.dart';
 import 'package:organize/src/_core/widgets/organize_item_tile.dart';
 import 'package:organize/src/models/group_model.dart';
 import 'package:organize/src/view_models/group_view_model.dart';
@@ -29,10 +28,9 @@ class HomeScreen extends StatelessWidget {
               }
 
               if (groupList.isEmpty) {
-                return DescriptionButton(
-                  description: 'There is no group yet',
-                  buttonText: 'Add',
-                  onTap: () {},
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [Text('There is no group yet'), Text('Add one!')],
                 );
               }
               return ListView.builder(
