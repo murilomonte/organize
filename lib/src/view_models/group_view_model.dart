@@ -20,9 +20,12 @@ class GroupViewModel extends ChangeNotifier {
   List<SubtaskModel> getSubtaskList(int taskId) =>
       _subtasklist.where((e) => e.taskId == taskId).toList();
 
-  GroupModel getGroup(int id) => _groupList.where((e) => e.id == id,).toList()[0];
-  TaskModel getTask(int id) => _taskList.where((e) => e.id == id,).toList()[0];
-  SubtaskModel getSubtask(int id) => _subtasklist.where((e) => e.id == id,).toList()[0];
+  List<GroupModel> getGroup(int id) =>
+      _groupList.where((e) => e.id == id).toList();
+  List<TaskModel> getTask(int id) =>
+      _taskList.where((e) => e.id == id).toList();
+  List<SubtaskModel> getSubtask(int id) =>
+      _subtasklist.where((e) => e.id == id).toList();
 
   String errorMsg = '';
   bool isLoading = false;
@@ -221,6 +224,51 @@ class GroupViewModel extends ChangeNotifier {
         updatedAt: Value(DateTime.now()),
       ),
     );
+
+    switch (result) {
+      case Success():
+        break;
+
+      case Failure(message: String message):
+        errorMsg = message;
+        break;
+    }
+
+    _updateLists();
+  }
+
+  void deleteGroup(int id) async {
+    final result = await repo.deleteGroup(id);
+
+    switch (result) {
+      case Success():
+        break;
+
+      case Failure(message: String message):
+        errorMsg = message;
+        break;
+    }
+
+    _updateLists();
+  }
+
+  void deleteTask(int id) async {
+    final result = await repo.deleteTask(id);
+
+    switch (result) {
+      case Success():
+        break;
+
+      case Failure(message: String message):
+        errorMsg = message;
+        break;
+    }
+
+    _updateLists();
+  }
+
+  void deleteSubtask(int id) async {
+    final result = await repo.deleteSubtask(id);
 
     switch (result) {
       case Success():

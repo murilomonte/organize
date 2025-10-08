@@ -2,11 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:organize/src/_core/widgets/organize_item_tile.dart';
 import 'package:organize/src/models/group_model.dart';
 import 'package:organize/src/view_models/group_view_model.dart';
-import 'package:organize/src/views/group/group_view.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  // Future<void> _openGroup(BuildContext context, int id) async {
+  //   final deleteGroupId = await Navigator.pushNamed(
+  //     context,
+  //     'group',
+  //     arguments: id,
+  //   );
+
+  //   if (deleteGroupId != null) {
+  //     setState(() {
+  //       context.read<GroupViewModel>().deleteGroup(id);
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +60,12 @@ class HomeScreen extends StatelessWidget {
                     description: groupList[index].description,
                     status: groupList[index].status,
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              GroupView(id: groupList[index].id),
-                        ),
+                        'group',
+                        arguments: groupList[index].id,
                       );
+                      // _openGroup(context, groupList[index].id);
                     },
                   );
                 },
