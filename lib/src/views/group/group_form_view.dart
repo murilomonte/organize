@@ -26,7 +26,7 @@ class _GroupFormViewState extends State<GroupFormView> {
     );
   }
 
-  void _saveGroup() {
+  void _saveGroup(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       final title = _titleController.text;
       final description = _descriptionController.text;
@@ -45,6 +45,7 @@ class _GroupFormViewState extends State<GroupFormView> {
               : null,
         );
       }
+      Navigator.pop(context);
     }
   }
 
@@ -116,8 +117,7 @@ class _GroupFormViewState extends State<GroupFormView> {
                   ),
                 ),
                 onPressed: () {
-                  _saveGroup();
-                  Navigator.pop(context);
+                  _saveGroup(context);
                 },
                 icon: Icon(Icons.add),
                 label: Text(

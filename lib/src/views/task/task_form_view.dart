@@ -30,7 +30,7 @@ class _TaskFormViewState extends State<TaskFormView> {
     _points = widget.task?.score.toDouble() ?? 0;
   }
 
-  void _saveGroup() {
+  void _save(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       final title = _titleController.text;
       final description = _descriptionController.text;
@@ -53,6 +53,7 @@ class _TaskFormViewState extends State<TaskFormView> {
           score: points != widget.task!.score ? points : null,
         );
       }
+      Navigator.pop(context);
     }
   }
 
@@ -160,8 +161,7 @@ class _TaskFormViewState extends State<TaskFormView> {
                   ),
                 ),
                 onPressed: () {
-                  _saveGroup();
-                  Navigator.pop(context);
+                  _save(context);
                 },
                 icon: Icon(Icons.add),
                 label: Text(

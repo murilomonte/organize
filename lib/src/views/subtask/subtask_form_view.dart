@@ -30,7 +30,7 @@ class _SubtaskFormViewState extends State<SubtaskFormView> {
     _points = widget.subtask?.score.toDouble() ?? 0;
   }
 
-  void _save() {
+  void _save(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       final title = _titleController.text;
       final description = _descriptionController.text;
@@ -53,6 +53,7 @@ class _SubtaskFormViewState extends State<SubtaskFormView> {
           score: points != widget.subtask!.score ? points : null,
         );
       }
+      Navigator.pop(context);
     }
   }
 
@@ -158,8 +159,7 @@ class _SubtaskFormViewState extends State<SubtaskFormView> {
                   ),
                 ),
                 onPressed: () {
-                  _save();
-                  Navigator.pop(context);
+                  _save(context);
                 },
                 icon: Icon(Icons.add),
                 label: Text(
