@@ -2,7 +2,7 @@ import 'package:organize/src/data/database/app_database.dart';
 import 'package:organize/src/data/database/status_enum.dart';
 
 class SubtaskModel {
-  final int? id;
+  final int id;
   final int taskId;
   final String title;
   final int score;
@@ -12,7 +12,7 @@ class SubtaskModel {
   final DateTime updatedAt;
 
   SubtaskModel({
-    this.id,
+    required this.id,
     required this.taskId,
     required this.title,
     required this.score,
@@ -64,6 +64,7 @@ class SubtaskModel {
       id: subtask.id,
       taskId: subtask.task,
       title: subtask.title,
+      description: subtask.description,
       score: subtask.score,
       status: subtask.status,
       createdAt: subtask.createdAt,

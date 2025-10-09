@@ -10,7 +10,7 @@ part 'status_dao.g.dart';
 class StatusDao extends DatabaseAccessor<AppDatabase> with _$StatusDaoMixin {
   StatusDao(super.db);
 
-  Future<int> _getTaskAndSubtaskCount(Status status) async {
+  Future<int> _getAllStatusCount(Status status) async {
     // Task
     final taskQuery = selectOnly(tasks)
       ..addColumns([tasks.id.count()])
@@ -31,15 +31,29 @@ class StatusDao extends DatabaseAccessor<AppDatabase> with _$StatusDaoMixin {
             .getSingle() ??
         0;
 
-    return taskCount + subtaskCount;
+    // Subtask
+    final groupQuery = selectOnly(groups)
+      ..addColumns([groups.id.count()])
+      ..where(groups.status.equals(status.name));
+
+    int groupCount =
+        await groupQuery
+            .map((row) => row.read(groups.id.count()))
+            .getSingle() ??
+        0;
+
+    return taskCount + subtaskCount + groupCount;
   }
 
   // completed
   Future<int> getCompletedCount() =>
-      _getTaskAndSubtaskCount(Status.completed);
+      _getAllStatusCount(Status.completed);
 
   // pending
-  Future<int> getPendingCount() => _getTaskAndSubtaskCount(Status.pending);
+  Future<int> getPendingCount() => _getAllStatusCount(Status.pending);
+
+  // inProgress
+  Future<int> getInProgressount() => _getAllStatusCount(Status.inProgress);
 
   // total score
   Future<int> getTotalScore() async {

@@ -46,21 +46,16 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _isCompletedMeta = const VerificationMeta(
-    'isCompleted',
-  );
   @override
-  late final GeneratedColumn<bool> isCompleted = GeneratedColumn<bool>(
-    'is_completed',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("is_completed" IN (0, 1))',
-    ),
-    defaultValue: Constant(false),
-  );
+  late final GeneratedColumnWithTypeConverter<Status, String> status =
+      GeneratedColumn<String>(
+        'status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: Constant(Status.pending.name),
+      ).withConverter<Status>($GroupsTable.$converterstatus);
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -90,7 +85,7 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
     id,
     title,
     description,
-    isCompleted,
+    status,
     createdAt,
     updatedAt,
   ];
@@ -123,15 +118,6 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
         description.isAcceptableOrUnknown(
           data['description']!,
           _descriptionMeta,
-        ),
-      );
-    }
-    if (data.containsKey('is_completed')) {
-      context.handle(
-        _isCompletedMeta,
-        isCompleted.isAcceptableOrUnknown(
-          data['is_completed']!,
-          _isCompletedMeta,
         ),
       );
     }
@@ -168,10 +154,12 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
         DriftSqlType.string,
         data['${effectivePrefix}description'],
       ),
-      isCompleted: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}is_completed'],
-      )!,
+      status: $GroupsTable.$converterstatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}status'],
+        )!,
+      ),
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -187,20 +175,23 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
   $GroupsTable createAlias(String alias) {
     return $GroupsTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<Status, String, String> $converterstatus =
+      const EnumNameConverter<Status>(Status.values);
 }
 
 class Group extends DataClass implements Insertable<Group> {
   final int id;
   final String title;
   final String? description;
-  final bool isCompleted;
+  final Status status;
   final DateTime createdAt;
   final DateTime updatedAt;
   const Group({
     required this.id,
     required this.title,
     this.description,
-    required this.isCompleted,
+    required this.status,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -212,7 +203,11 @@ class Group extends DataClass implements Insertable<Group> {
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
     }
-    map['is_completed'] = Variable<bool>(isCompleted);
+    {
+      map['status'] = Variable<String>(
+        $GroupsTable.$converterstatus.toSql(status),
+      );
+    }
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
@@ -225,7 +220,7 @@ class Group extends DataClass implements Insertable<Group> {
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
-      isCompleted: Value(isCompleted),
+      status: Value(status),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
     );
@@ -240,7 +235,9 @@ class Group extends DataClass implements Insertable<Group> {
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
       description: serializer.fromJson<String?>(json['description']),
-      isCompleted: serializer.fromJson<bool>(json['isCompleted']),
+      status: $GroupsTable.$converterstatus.fromJson(
+        serializer.fromJson<String>(json['status']),
+      ),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
@@ -252,7 +249,9 @@ class Group extends DataClass implements Insertable<Group> {
       'id': serializer.toJson<int>(id),
       'title': serializer.toJson<String>(title),
       'description': serializer.toJson<String?>(description),
-      'isCompleted': serializer.toJson<bool>(isCompleted),
+      'status': serializer.toJson<String>(
+        $GroupsTable.$converterstatus.toJson(status),
+      ),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
@@ -262,14 +261,14 @@ class Group extends DataClass implements Insertable<Group> {
     int? id,
     String? title,
     Value<String?> description = const Value.absent(),
-    bool? isCompleted,
+    Status? status,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) => Group(
     id: id ?? this.id,
     title: title ?? this.title,
     description: description.present ? description.value : this.description,
-    isCompleted: isCompleted ?? this.isCompleted,
+    status: status ?? this.status,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
   );
@@ -280,9 +279,7 @@ class Group extends DataClass implements Insertable<Group> {
       description: data.description.present
           ? data.description.value
           : this.description,
-      isCompleted: data.isCompleted.present
-          ? data.isCompleted.value
-          : this.isCompleted,
+      status: data.status.present ? data.status.value : this.status,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -294,7 +291,7 @@ class Group extends DataClass implements Insertable<Group> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
-          ..write('isCompleted: $isCompleted, ')
+          ..write('status: $status, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -303,7 +300,7 @@ class Group extends DataClass implements Insertable<Group> {
 
   @override
   int get hashCode =>
-      Object.hash(id, title, description, isCompleted, createdAt, updatedAt);
+      Object.hash(id, title, description, status, createdAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -311,7 +308,7 @@ class Group extends DataClass implements Insertable<Group> {
           other.id == this.id &&
           other.title == this.title &&
           other.description == this.description &&
-          other.isCompleted == this.isCompleted &&
+          other.status == this.status &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
 }
@@ -320,14 +317,14 @@ class GroupsCompanion extends UpdateCompanion<Group> {
   final Value<int> id;
   final Value<String> title;
   final Value<String?> description;
-  final Value<bool> isCompleted;
+  final Value<Status> status;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   const GroupsCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.description = const Value.absent(),
-    this.isCompleted = const Value.absent(),
+    this.status = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
@@ -335,7 +332,7 @@ class GroupsCompanion extends UpdateCompanion<Group> {
     this.id = const Value.absent(),
     required String title,
     this.description = const Value.absent(),
-    this.isCompleted = const Value.absent(),
+    this.status = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   }) : title = Value(title);
@@ -343,7 +340,7 @@ class GroupsCompanion extends UpdateCompanion<Group> {
     Expression<int>? id,
     Expression<String>? title,
     Expression<String>? description,
-    Expression<bool>? isCompleted,
+    Expression<String>? status,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
   }) {
@@ -351,7 +348,7 @@ class GroupsCompanion extends UpdateCompanion<Group> {
       if (id != null) 'id': id,
       if (title != null) 'title': title,
       if (description != null) 'description': description,
-      if (isCompleted != null) 'is_completed': isCompleted,
+      if (status != null) 'status': status,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
     });
@@ -361,7 +358,7 @@ class GroupsCompanion extends UpdateCompanion<Group> {
     Value<int>? id,
     Value<String>? title,
     Value<String?>? description,
-    Value<bool>? isCompleted,
+    Value<Status>? status,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
   }) {
@@ -369,7 +366,7 @@ class GroupsCompanion extends UpdateCompanion<Group> {
       id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
-      isCompleted: isCompleted ?? this.isCompleted,
+      status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -387,8 +384,10 @@ class GroupsCompanion extends UpdateCompanion<Group> {
     if (description.present) {
       map['description'] = Variable<String>(description.value);
     }
-    if (isCompleted.present) {
-      map['is_completed'] = Variable<bool>(isCompleted.value);
+    if (status.present) {
+      map['status'] = Variable<String>(
+        $GroupsTable.$converterstatus.toSql(status.value),
+      );
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -405,7 +404,7 @@ class GroupsCompanion extends UpdateCompanion<Group> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
-          ..write('isCompleted: $isCompleted, ')
+          ..write('status: $status, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -1475,7 +1474,7 @@ typedef $$GroupsTableCreateCompanionBuilder =
       Value<int> id,
       required String title,
       Value<String?> description,
-      Value<bool> isCompleted,
+      Value<Status> status,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
     });
@@ -1484,7 +1483,7 @@ typedef $$GroupsTableUpdateCompanionBuilder =
       Value<int> id,
       Value<String> title,
       Value<String?> description,
-      Value<bool> isCompleted,
+      Value<Status> status,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
     });
@@ -1537,10 +1536,11 @@ class $$GroupsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<bool> get isCompleted => $composableBuilder(
-    column: $table.isCompleted,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnWithTypeConverterFilters<Status, Status, String> get status =>
+      $composableBuilder(
+        column: $table.status,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
@@ -1602,8 +1602,8 @@ class $$GroupsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<bool> get isCompleted => $composableBuilder(
-    column: $table.isCompleted,
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -1638,10 +1638,8 @@ class $$GroupsTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<bool> get isCompleted => $composableBuilder(
-    column: $table.isCompleted,
-    builder: (column) => column,
-  );
+  GeneratedColumnWithTypeConverter<Status, String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -1706,14 +1704,14 @@ class $$GroupsTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<String> title = const Value.absent(),
                 Value<String?> description = const Value.absent(),
-                Value<bool> isCompleted = const Value.absent(),
+                Value<Status> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => GroupsCompanion(
                 id: id,
                 title: title,
                 description: description,
-                isCompleted: isCompleted,
+                status: status,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
               ),
@@ -1722,14 +1720,14 @@ class $$GroupsTableTableManager
                 Value<int> id = const Value.absent(),
                 required String title,
                 Value<String?> description = const Value.absent(),
-                Value<bool> isCompleted = const Value.absent(),
+                Value<Status> status = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => GroupsCompanion.insert(
                 id: id,
                 title: title,
                 description: description,
-                isCompleted: isCompleted,
+                status: status,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
               ),

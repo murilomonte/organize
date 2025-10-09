@@ -33,33 +33,47 @@ class OrganizeRepository {
     required this.tasksDao,
     required this.subtasksDao,
     required this.statusDao,
-  });
+  }); 
 
-  Future<Result<List<GroupModel>>> getAllGroupWithTasksAndSubtasks() async {
-    // TODO: melhorar tratamento de erro
+  Future<Result<List<GroupModel>>> getAllGroups() async {
     try {
       List<GroupModel> result = [];
-
       List<Group> groups = await groupsDao.getAllGroups();
-      List<Task> tasks = await tasksDao.getAllTasks();
-      List<Subtask> subtasks = await subtasksDao.getAllSubtasks();
 
       for (var group in groups) {
         GroupModel groupModel = GroupModel.fromEntity(group);
+        result.add(groupModel);
+      }
 
-        tasks.where((element) => element.group == group.id).forEach((task) {
-          TaskModel taskModel = TaskModel.fromEntity(task);
+      return Success(result);
+    } catch (err) {
+      return Failure("Unexpected error: $err");
+    }
+  }
 
-          subtasks.where((element) => element.task == task.id).forEach((
-            subtask,
-          ) {
-            SubtaskModel subtaskModel = SubtaskModel.fromEntity(subtask);
-            taskModel.subtasks.add(subtaskModel);
-          });
+  Future<Result<List<TaskModel>>> getAllTasks() async {
+    try {
+      List<TaskModel> result = [];
+      List<Task> tasks = await tasksDao.getAllTasks();
 
-          groupModel.tasks.add(taskModel);
-        });
+      for (var task in tasks) {
+        TaskModel groupModel = TaskModel.fromEntity(task);
+        result.add(groupModel);
+      }
 
+      return Success(result);
+    } catch (err) {
+      return Failure("Unexpected error: $err");
+    }
+  }
+
+  Future<Result<List<SubtaskModel>>> getAllSubtasks() async {
+    try {
+      List<SubtaskModel> result = [];
+      List<Subtask> subtasks = await subtasksDao.getAllSubtasks();
+
+      for (var subtask in subtasks) {
+        SubtaskModel groupModel = SubtaskModel.fromEntity(subtask);
         result.add(groupModel);
       }
 
@@ -154,11 +168,13 @@ class OrganizeRepository {
     try {
       int completedCount = await statusDao.getCompletedCount();
       int pendingCount = await statusDao.getPendingCount();
+      int inProgressCount = await statusDao.getInProgressount();
       int totalScore = await statusDao.getTotalScore();
 
       StatusModel result = StatusModel(
         completed: completedCount,
         pending: pendingCount,
+        inProgress: inProgressCount,
         totalScore: totalScore,
       );
 
