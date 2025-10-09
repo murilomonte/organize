@@ -168,11 +168,13 @@ class OrganizeRepository {
     try {
       int completedCount = await statusDao.getCompletedCount();
       int pendingCount = await statusDao.getPendingCount();
+      int inProgressCount = await statusDao.getInProgressount();
       int totalScore = await statusDao.getTotalScore();
 
       StatusModel result = StatusModel(
         completed: completedCount,
         pending: pendingCount,
+        inProgress: inProgressCount,
         totalScore: totalScore,
       );
 

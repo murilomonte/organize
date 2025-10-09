@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:organize/src/views/group/group_form_view.dart';
 import 'package:organize/src/views/home/home_screen.dart';
+import 'package:organize/src/views/progress/progress_view.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
@@ -23,7 +23,7 @@ class _NavigationState extends State<Navigation> {
     },
   ];
 
-  List<Widget> views = [HomeScreen(), Center(child: Text('Progress'))];
+  List<Widget> views = [HomeScreen(), ProgressView()];
 
   void _onDestinationSelected(int value) {
     setState(() {
@@ -48,18 +48,7 @@ class _NavigationState extends State<Navigation> {
         }).toList(),
       ),
       body: views[_currentIndex],
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => GroupFormView()
-            ),
-          );
-        },
-        label: Text('Add Group'),
-        icon: Icon(Icons.add),
-      ),
+      
     );
   }
 }
