@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:organize/src/_core/widgets/organize_item_tile.dart';
 import 'package:organize/src/models/group_model.dart';
 import 'package:organize/src/view_models/group_view_model.dart';
+import 'package:organize/src/views/group/group_form_view.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(title: Text('Organize')),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsetsGeometry.symmetric(horizontal: 15),
         child: Center(
           child: Consumer<GroupViewModel>(
             builder: (context, value, child) {
@@ -73,6 +74,16 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => GroupFormView()),
+          );
+        },
+        label: Text('Add Group'),
+        icon: Icon(Icons.add),
       ),
     );
   }

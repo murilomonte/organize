@@ -38,9 +38,16 @@ class OrganizeItemTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       spacing: 5,
                       children: [
+                        if (status == Status.inProgress)
+                          Icon(
+                            Icons.timer_outlined,
+                            size: 20,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         if (status == Status.completed)
                           Icon(
                             Icons.task_alt,
