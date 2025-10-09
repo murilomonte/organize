@@ -13,20 +13,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Future<void> _openGroup(BuildContext context, int id) async {
-  //   final deleteGroupId = await Navigator.pushNamed(
-  //     context,
-  //     'group',
-  //     arguments: id,
-  //   );
-
-  //   if (deleteGroupId != null) {
-  //     setState(() {
-  //       context.read<GroupViewModel>().deleteGroup(id);
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         'group',
                         arguments: groupList[index].id,
                       );
-                      // _openGroup(context, groupList[index].id);
                     },
                   );
                 },

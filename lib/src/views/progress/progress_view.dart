@@ -26,23 +26,23 @@ class _ProgressViewState extends State<ProgressView> {
     return Scaffold(
       appBar: AppBar(
         title: Text('My progress'),
-        actionsPadding: EdgeInsets.all(10),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Scaffold(
-                    appBar: AppBar(),
-                    body: Center(child: Text('Settings page')),
-                  ),
-                ),
-              );
-            },
-            icon: Icon(Icons.settings_outlined),
-          ),
-        ],
+        // actionsPadding: EdgeInsets.all(10),
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(
+        //           builder: (context) => Scaffold(
+        //             appBar: AppBar(),
+        //             body: Center(child: Text('Settings page')),
+        //           ),
+        //         ),
+        //       );
+        //     },
+        //     icon: Icon(Icons.settings_outlined),
+        //   ),
+        // ],
       ),
       body: Consumer<StatusViewModel>(
         builder: (context, value, child) {

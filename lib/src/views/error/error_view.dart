@@ -11,7 +11,7 @@ class ErrorView extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            Text('An error occoured'),
+            Text('An error occoured', style: TextStyle(fontWeight: FontWeight.bold),),
             if (message != null) Text(message!),
           ],
         ),

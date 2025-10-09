@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:organize/src/views/error/error_view.dart';
 import 'package:organize/src/views/group/group_view.dart';
 import 'package:organize/src/views/navigation.dart';
 import 'package:organize/src/views/subtask/subtask_view.dart';
@@ -42,10 +43,7 @@ class Organize extends StatelessWidget {
       },
       onUnknownRoute: (settings) {
         return MaterialPageRoute(
-          builder: (context) => Scaffold(
-            appBar: AppBar(),
-            body: Center(child: Text('Unknown route.')),
-          ),
+          builder: (context) => ErrorView(message: 'Unknown route.',)
         );
       },
       debugShowCheckedModeBanner: false,
