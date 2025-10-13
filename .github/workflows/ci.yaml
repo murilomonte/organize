@@ -26,6 +26,6 @@ jobs:
       - run: flutter build apk --release
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/debug/*"
+          artifacts: "build/app/outputs/flutter-apk/app-release.apk"
           tag: v0.1.${{ github.run_number}}
           token: ${{ secrets.TOKEN}}
